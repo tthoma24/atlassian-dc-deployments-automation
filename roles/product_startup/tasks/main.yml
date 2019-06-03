@@ -4,6 +4,10 @@
   template:
     src: "product.service.j2"
     dest: "/etc/systemd/system/{{ atl_systemd_service_name }}"
-  notify:
-    - Enable Product
-    - Restart Product
+
+- name: Enable and start Product
+  service:
+    name: "{{ atl_systemd_service_name }}"
+    state: started
+    enabled: true
+  when: atl_startup_enable

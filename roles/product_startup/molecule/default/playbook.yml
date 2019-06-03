@@ -7,7 +7,6 @@
     atl_product_edition: "jira-software"
 
     atl_startup_enable: false
-    atl_startup_restart: false
 
   pre_tasks:
     - name: Create systemd dir if necessary

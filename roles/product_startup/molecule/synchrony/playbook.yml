@@ -15,7 +15,6 @@
     atl_systemd_service_name: "synchrony.service"
 
     atl_startup_enable: false
-    atl_startup_restart: false
 
   pre_tasks:
     - name: Create systemd dir if necessary
