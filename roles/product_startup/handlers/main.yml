@@ -1,6 +1,7 @@
 ---
 
 - name: Restart Product
+  become: true
   systemd:
     name: "{{ atl_systemd_service_name }}"
     state: restarted
