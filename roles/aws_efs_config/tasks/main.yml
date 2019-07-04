@@ -13,3 +13,4 @@
     fstype: efs
     opts: "defaults,_netdev"
     state: mounted
+  ignore_errors: yes
