@@ -99,10 +99,9 @@
 
 ######################################################################
 
-
 - name: Perform any additional per-edition version setup
   include_tasks: "{{ atl_product_edition }}_extra_tasks.yml"
-
+  when: atl_product_edition!= "crowd"
 
 - name: Create installation directories
   file:
@@ -117,7 +116,6 @@
     - "{{ atl_product_installation_versioned }}"
     - "{{ atl_product_version_cache_dir }}"
   changed_when: false  # For Molecule idempotence check
-
 
 # At this point atl_product_version should be set, cache if necessary.
 - name: Write override cached version when specified
@@ -136,12 +134,14 @@
     dest: "{{ atl_product_download }}"
     mode: 0755
     force: false
+  when: atl_product_edition!= "crowd"
 
 - name: Create installer varfile
   template:
     src: "{{ atl_product_family }}.varfile.j2"
     dest: "{{ atl_product_varfile }}"
     mode: 0755
+  when: atl_product_edition!= "crowd"
 
 # NOTE: We run the installer as the user rather than root to limit its
 # actions. For example, if root and the 'jira' user exists then it
@@ -153,6 +153,11 @@
     creates: "{{ atl_product_installation_versioned }}/.install4j/"
   become: true
   become_user: "{{ atl_product_user }}"
+  when: atl_product_edition!= "crowd"
+
+
+- import_tasks: crowd_install.yml
+  when: atl_product_edition == "crowd"
 
 - name: Symlink the installed version to current
   file:
@@ -160,3 +165,4 @@
     dest: "{{ atl_product_installation_current }}"
     state: link
     force: true
+  when: atl_product_edition != "crowd"
