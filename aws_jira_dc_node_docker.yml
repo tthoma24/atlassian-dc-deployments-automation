@@ -8,6 +8,8 @@
     atl_product_user: "jira"
     atl_product_edition: "jira-{{ lookup('env', 'ATL_PRODUCT_EDITION') | lower }}"
 
+    alt_docker_install: true
+
   roles:
     - role: linux_common
     - role: aws_common

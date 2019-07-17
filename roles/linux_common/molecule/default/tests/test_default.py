@@ -14,3 +14,4 @@ def test_user_prereq(host):
 def test_support_packages(host):
     assert host.file('/usr/bin/jq').exists
     assert host.file('/usr/bin/curl').exists
+    assert not host.file('/usr/bin/docker').exists

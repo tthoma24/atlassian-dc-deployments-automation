@@ -6,3 +6,9 @@
       - python3-psycopg2
       - libxml2-utils
       - git
+
+- name: Install Docker if necessary
+  apt:
+    name:
+      - docker.io
+  when: atl_docker_install

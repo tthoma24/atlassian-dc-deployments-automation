@@ -6,3 +6,9 @@
       - shadow-utils
       - libxml2
       - git-{{ git_version }}
+
+- name: Install Docker if necessary
+  command: amazon-linux-extras install -y docker
+  args:
+    creates: /usr/bin/docker
+  when: atl_docker_install
