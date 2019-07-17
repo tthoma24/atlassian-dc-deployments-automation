@@ -7,6 +7,6 @@
     owner: root
     group: root
     mode: 0640
-  notify:
-    - Enable Product
-    - Restart Product
+#  notify:
+#    - Enable Product
+#    - Restart Product
