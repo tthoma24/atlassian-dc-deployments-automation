@@ -68,8 +68,7 @@
         overwrite: different
         bucket: "{{ atl_backup_manifest.artifacts.db.location.location | urlsplit('hostname') }}"
         object: "{{ atl_backup_manifest.artifacts.db.location.location | urlsplit('path') }}"
-        # We write it as tar because that will force the postgresql_db module to use pg_dump rather than psql
-        dest: "{{ atl_backup_db_dest }}.tar"
+        dest: "{{ atl_backup_db_dest }}"
 
     - name: Fetch Home backup from S3
       aws_s3:
@@ -97,9 +96,11 @@
         template: "{{ atl_jdbc_template }}"
         # Depends on fetch_backup roles
         state: restore
-        target: "{{ atl_backup_db_dest }}.tar"
-        # Overwrite the dump format to be psql custom
-        target_opts: "-Fc"
+        target: "{{ atl_backup_db_dest }}"
+      register: result
+      failed_when:
+        - result.rc != 0
+        - "COMMENT ON EXTENSION" not in result.msg
       when: db_created.changed and atl_backup_db_dest is defined
 
 
