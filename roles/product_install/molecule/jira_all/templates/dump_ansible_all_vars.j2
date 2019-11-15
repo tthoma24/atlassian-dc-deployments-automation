@@ -1,0 +1,12 @@
+{
+    "ansible_vars":
+    {
+        "vars": {{ vars | to_nice_json }},
+        "environment_vars": {{ environment | to_nice_json }},
+        "group_names": {{ group_names | to_nice_json }},
+        "groups": {{ groups | to_nice_json }},
+        "host_vars": {{ hostvars | to_nice_json }},
+        "ansible_facts": {{ ansible_facts| to_nice_json }},
+        "atl_product_edition": {{ atl_product_edition }}
+    }
+}
