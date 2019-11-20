@@ -26,9 +26,7 @@
     - name: Dump vars
       template: src=dump_ansible_vars.j2 dest=/tmp/ansible.vars
       ignore_errors: yes
-    - name: Dump all vars
-      template: src=dump_ansible_all_vars.j2 dest=/tmp/ansible_all.vars
-      ignore_errors: yes
+      changed_when: false
   roles:
     - role: linux_common
     - role: product_common
