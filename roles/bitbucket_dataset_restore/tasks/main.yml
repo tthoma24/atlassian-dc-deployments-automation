@@ -19,10 +19,14 @@
     url: "{{ atl_bitbucket_dataset_url }}"
     dest: /tmp/import
 
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
+
 - name: wait for port 7990 to be up
   wait_for:
     port: 7990
     delay: 10
+    timeout: 60
 
 - name: Invoke Import API
   uri: 
@@ -36,7 +40,3 @@
     return_content: yes
   register: response
   failed_when: "'INITIALISING' not in response.content"
-
-
-
-
