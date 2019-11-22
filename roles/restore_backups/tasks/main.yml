@@ -68,7 +68,9 @@
         overwrite: different
         bucket: "{{ atl_backup_manifest.artifacts.db.location.location | urlsplit('hostname') }}"
         object: "{{ atl_backup_manifest.artifacts.db.location.location | urlsplit('path') }}"
-        dest: "{{ atl_backup_db_dest }}"
+        # We save the backup as a .tar file so that the postgresql_db module uses pg_restore instead of psql to do restore
+        # This can be removed when ansible 2.10 is released
+        dest: "{{ atl_backup_db_dest }}.tar"
 
     - name: Fetch Home backup from S3
       aws_s3:
@@ -96,42 +98,18 @@
         template: "{{ atl_jdbc_template }}"
         # Depends on fetch_backup roles
         state: restore
-        target: "{{ atl_backup_db_dest }}"
+        target: "{{ atl_backup_db_dest }}.tar"
+        target_opts: "-Fc"
       register: result
+      # managed DBs in cloud providers are not allowing full root access to the DB engine, we can safely ignore the COMMENT ON EXTENSION error
       failed_when:
         - result.rc != 0
-        - "COMMENT ON EXTENSION" not in result.msg
+        - '"COMMENT ON EXTENSION" not in result.msg'
       when: db_created.changed and atl_backup_db_dest is defined
 
 
-    - name: Check for the restore canary file
-      stat:
-        path: "{{ atl_backup_home_restore_canary_path }}"
-      register: restore_canary
-
-    - block:
-
-        - name: Create shared home if necessary
-          file:
-            path: "{{ atl_product_home_shared }}"
-            state: directory
-            mode: 0750
-            owner: "{{ atl_product_user }}"
-            group: "{{ atl_product_user }}"
-
-        - name: Restore the shared-home backup
-          unarchive:
-            src: "{{ atl_backup_home_dest }}"
-            dest: "{{ atl_product_home_shared }}"
-            owner: "{{ atl_product_user }}"
-            group: "{{ atl_product_user }}"
-
-        - name: Create restore-canary if necessary
-          copy:
-            dest: "{{ atl_backup_home_restore_canary_path }}"
-            content: "{{ atl_backup_id }}"
-
-      when: not restore_canary.stat.exists
+    - name: Restore shared home
+      include_tasks: "home_restore.yml"
 
 
   when: atl_restore_required

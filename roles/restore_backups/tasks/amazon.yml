@@ -8,3 +8,5 @@
     PYTHON: /bin/python
   args:
     creates: /usr/bin/psql
+  environment:
+    PYTHON: /bin/python
