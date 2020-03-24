@@ -1,5 +1,0 @@
----
-- name: stop {{ atl_product_family }} {{ atl_product_edition}}
-  service:
-    name: "{{ atl_systemd_service_name }}"
-    state: stopped

@@ -12,9 +12,14 @@
 
     atl_startup_systemd_params:
       - "LimitNOFILE=16384"
-  
+
+  pre_tasks:
+    - name: stop jira
+      service:
+        name: "{{ atl_systemd_service_name }}"
+        state: stopped
+
   roles:
-    - role: product_stop
     - role: product_common
     - role: product_install
     - role: jira_config
