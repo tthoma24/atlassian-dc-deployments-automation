@@ -20,6 +20,8 @@
         state: stopped
 
   roles:
+    # This is needed because it sets the node ID
+    - role: aws_common
     - role: product_common
     - role: product_install
     - role: jira_config
