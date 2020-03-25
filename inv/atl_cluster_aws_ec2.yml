@@ -11,6 +11,6 @@
 plugin: aws_ec2
 
 filters:
-  tag:aws:autoscaling:groupName: your_autoscaling_group
+  tag:aws:autoscaling:groupName: inno-bpartridge-ansible-anywhere-jira-cluster
 regions:
-  - your_deployment_region
+  - ap-southeast-2
