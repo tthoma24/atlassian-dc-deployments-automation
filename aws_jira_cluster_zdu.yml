@@ -2,12 +2,14 @@
 
 - hosts: localhost
   connection: local
+  vars_files: group_vars/aws_node_local.yml
   roles:
     - role: jira_zdu_init
 
 - hosts: all
   serial: 1
   any_errors_fatal: true
+  vars_files: group_vars/aws_node_local.yml
   roles:
     - role: aws_common
     - role: product_common
@@ -17,5 +19,6 @@
 
 - hosts: localhost
   connection: local
+  vars_files: group_vars/aws_node_local.yml
   roles:
     - role: jira_zdu_finish
