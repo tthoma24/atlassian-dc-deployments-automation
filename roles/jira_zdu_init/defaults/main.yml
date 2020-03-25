@@ -1,0 +1,2 @@
+atl_jira_baseurl: "{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}"
+atl_jira_zdu_rest_endpoint: "api/2/cluster/zdu"

@@ -1,0 +1,32 @@
+---
+
+- name: Assert cluster is ready for upgrade
+  uri:
+    url: "{{ atl_jira_baseurl }}/{{ atl_jira_zdu_rest_endpoint }}/state"
+    force_basic_auth: yes
+    user: "{{ jira_admin_username }}"
+    password: "{{ jira_admin_password }}"
+    method: GET
+    status_code: 200
+  register: pre_upgrade_cluster_state
+
+- name: Begin cluster upgrade
+  uri:
+    url: "{{ atl_jira_baseurl }}/{{ atl_jira_zdu_rest_endpoint }}/start"
+    force_basic_auth: yes
+    user: "{{ jira_admin_username }}"
+    password: "{{ jira_admin_password }}"
+    method: POST
+    status_code: 200
+  when: pre_upgrade_cluster_state.json is defined and pre_upgrade_cluster_state.json.state == 'STABLE'
+
+- name: Verify cluster ready to upgrade
+  uri:
+    url: "{{ atl_jira_baseurl }}/{{ atl_jira_zdu_rest_endpoint }}/state"
+    force_basic_auth: yes
+    user: "{{ jira_admin_username }}"
+    password: "{{ jira_admin_password }}"
+    method: GET
+    status_code: 200
+  register: upgrade_cluster_state
+  failed_when: upgrade_cluster_state.json is not defined or upgrade_cluster_state.json.state != 'READY_TO_UPGRADE'

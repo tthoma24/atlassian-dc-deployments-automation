@@ -1,0 +1,21 @@
+---
+
+- hosts: localhost
+  connection: local
+  roles:
+    - role: jira_zdu_init
+
+- hosts: all
+  serial: 1
+  any_errors_fatal: true
+  roles:
+    - role: aws_common
+    - role: product_common
+    - role: product_install
+    - role: jira_config
+    - role: product_startup
+
+- hosts: localhost
+  connection: local
+  roles:
+    - role: jira_zdu_finish
