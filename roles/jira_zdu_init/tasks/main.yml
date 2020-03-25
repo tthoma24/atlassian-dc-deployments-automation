@@ -17,7 +17,7 @@
     user: "{{ jira_admin_username }}"
     password: "{{ jira_admin_password }}"
     method: POST
-    status_code: 200
+    status_code: 201
   when: pre_upgrade_cluster_state.json is defined and pre_upgrade_cluster_state.json.state == 'STABLE'
 
 - name: Verify cluster ready to upgrade

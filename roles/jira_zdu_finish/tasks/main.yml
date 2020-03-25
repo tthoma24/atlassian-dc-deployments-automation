@@ -18,7 +18,7 @@
     user: "{{ jira_admin_username }}"
     password: "{{ jira_admin_password }}"
     method: POST
-    status_code: 200
+    status_code: 201
 
 - name: Wait for cluster to finish running upgrade tasks
   uri:
