@@ -18,7 +18,7 @@
     atl_install_jsd_as_obr: "{{ lookup('env', 'ATL_JSD_ASOBR') }}"
     atl_systemd_service_name: "jira.service"
   pre_tasks:
-    - name: stop jira
+    - name: Stop jira
       service:
         name: "{{ atl_systemd_service_name }}"
         state: stopped
@@ -28,6 +28,17 @@
     - role: product_install
     - role: jira_config
     - role: product_startup
+  post_tasks:
+    - name: Wait for node to finish startup
+      uri:
+        url: "{{ atl_jira_baseurl }}/status"
+        method: GET
+        status_code: 200
+      register: jira_state
+      failed_when: jira_state.json is not defined or (jira_state.json is defined and jira_state.json.state != 'RUNNING')
+      until: jira_state.json is defined and jira_state.json.state == 'RUNNING'
+      retries: 120
+      delay: 5
 
 - hosts: localhost
   connection: local
