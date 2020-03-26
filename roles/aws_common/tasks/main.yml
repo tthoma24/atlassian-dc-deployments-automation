@@ -26,6 +26,7 @@
 
 - name: Store some metadata about this run
   include_tasks: "write-tags.yml"
+  when: atl_quickstart_deployment is defined and atl_quickstart_deployment
 
 - name: Initiate the startup of any new AWS services now
   meta: flush_handlers
