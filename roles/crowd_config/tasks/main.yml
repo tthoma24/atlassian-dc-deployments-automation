@@ -24,17 +24,28 @@
     path: "{{ atl_product_installation_versioned }}/crowd-webapp/WEB-INF/classes/crowd-init.properties"
     line: 'crowd.home={{ atl_product_home }}'
 
-- name: Set the Tomcat environment
+- name: Export CATALINA_OPTS in setenv.sh
   lineinfile:
-    path: "{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh"
-    insertafter: "EOF"
-    line: 'export CATALINA_OPTS="${CATALINA_OPTS} {{ atl_catalina_opts }} {{ atl_catalina_opts_extra }}"'
+    path: '{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh'
+    line: 'export CATALINA_OPTS'
 
-- name: Set the Crowd node name via CATALINA_OPTS
-  lineinfile:
+- name: CATALINA_OPTS to list
+  set_fact:
+    catalina_ops_list: "{{ catalina_ops_list|default([]) }} + {{ (item | trim | regex_replace('^-')).split(' -') }}"
+  loop:
+    - '{{ atl_catalina_opts }}'
+    - '{{ atl_catalina_opts_extra }}'
+
+- name: CATALINA_OPTS unique and sorted
+  set_fact:
+    catalina_opts: "{{ query('flattened', catalina_ops_list) | reject('equalto', '') | unique | sort }}"
+
+- name: Set CATALINA_OPTS in setenv.sh
+  blockinfile:
+    block: "{{ lookup('template', 'templates/catalina_opts.j2') }}"
     path: "{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh"
-    insertafter: "EOF"
-    line: export CATALINA_OPTS="${CATALINA_OPTS} -Dcluster.node.name={{ ansible_ec2_instance_id }}-{{ ansible_ec2_local_ipv4 }}"
+    insertbefore: "^export CATALINA_OPTS$"
+    marker: "# {mark} ANSIBLE MANAGED CATALINA_OPTS"
 
 - name: Set JAVA_HOME
   lineinfile:
@@ -54,7 +65,6 @@
     - "{{ atl_product_home_shared }}"
     - "{{ atl_product_shared_plugins }}"
   changed_when: false  # For Molecule idempotence check
-
 
 - name: Limit permissions on the installation directory
   file:
@@ -91,3 +101,41 @@
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
   changed_when: false  # For Molecule idempotence check
+
+- name: Assert baseurl to same as atl_proxy_name
+  postgresql_query:
+    login_host: "{{ atl_db_host }}"
+    login_user: "{{ atl_jdbc_user }}"
+    login_password: "{{ atl_jdbc_password }}"
+    db: "{{ atl_jdbc_db_name }}"
+    query: >
+      update cwd_property set property_value=%s
+      where property_name = 'base.url'
+    positional_args:
+      - "{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}/crowd"
+  when:
+    - atl_proxy_name is defined
+    - atl_tomcat_scheme is defined
+    - db_created is undefined or not db_created.changed
+  tags:
+    - skip_on_stack_update
+  ignore_errors: yes  # For Molecule as it has no db test framework included
+
+- name: Check that crowd.cfg.xml exists
+  stat:
+    path: "{{ atl_product_home_shared }}/crowd.cfg.xml"
+  register: crowd_cfg_stat_result
+
+- name: Assert JDBC password to same as atl_jdbc_password
+  xml:
+    path: "{{ atl_product_home_shared }}/crowd.cfg.xml"
+    xpath: "/application-configuration/properties/property[@name='hibernate.connection.password']"
+    value: "{{ atl_jdbc_password }}"
+  when: crowd_cfg_stat_result.stat.exists
+
+- name: Assert JDBC url to same as atl_jdbc_url
+  xml:
+    path: "{{ atl_product_home_shared }}/crowd.cfg.xml"
+    xpath: "/application-configuration/properties/property[@name='hibernate.connection.url']"
+    value: "{{ atl_jdbc_url }}?reWriteBatchedInserts=true"
+  when: crowd_cfg_stat_result.stat.exists

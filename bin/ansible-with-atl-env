@@ -9,7 +9,7 @@ LOG_FILE=${3:-"/dev/null"}
 ENV_FILE=${4:-"/etc/atl"}
 
 export PATH=/usr/local/bin:$PATH
-
+export PIP_DEFAULT_TIMEOUT=60
 
 # Set the environment with default exports
 set -a
@@ -20,6 +20,7 @@ set +a
 pipenv run \
     ansible-playbook -v \
         $ATL_DEPLOYMENT_REPOSITORY_CUSTOM_PARAMS \
+        -e "${PLAYBOOK_INVOCATION_EXTRA_PARAMS}" \
         -i $INV \
         $PLAYBOOK \
         2>&1 | tee --append $LOG_FILE

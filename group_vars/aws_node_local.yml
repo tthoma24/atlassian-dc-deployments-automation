@@ -34,20 +34,29 @@ atl_product_installation_versioned: "{{ atl_product_installation_base }}/{{ atl_
 atl_product_installation_current: "{{ atl_product_installation_base }}/current"
 atl_installer_temp: "{{ atl_installation_base }}/tmp"
 
-atl_product_log_locations:
+atl_product_logs_default: &logs_default
+  - path: "{{ atl_product_installation_current }}/logs/*"
+    type: product
+  - path: "{{ atl_product_home }}/logs/*"
+    type: product
+  - path: "{{ atl_product_home }}/log/*"
+    type: product
+  - path: "{{ atl_product_home }}/logs/audit/*"
+    type: audit
+  - path: "/var/log/ansible-bootstrap.log"
+    type: provisioning
+  - path: "/var/log/cfn-*.log"
+    type: provisioning
+
+atl_product_logs:
   confluence:
-    - "{{ atl_product_installation_current }}/logs"
-    - "{{ atl_product_home }}/logs"
+    *logs_default
   jira:
-    - "{{ atl_product_installation_current }}/logs"
-    - "{{ atl_product_home }}/log"
+    *logs_default
   stash:
-    - "{{ atl_product_home }}/log"
+    *logs_default
   crowd: []
 
-atl_provisioner_log_locations:
-  - "/var/log/ansible-bootstrap.log"
-  - "/var/log/cfn-*.log"
 
 #  The following are imports from the environment. These are generally
 #  set in /etc/atl by the CloudFormation template and sourced before
@@ -66,6 +75,7 @@ atl_aws_enable_cloudwatch_logs: "{{ lookup('env', 'ATL_AWS_ENABLE_CLOUDWATCH_LOG
 atl_db_engine: "{{ lookup('env', 'ATL_DB_ENGINE') }}"
 atl_db_host: "{{ lookup('env', 'ATL_DB_HOST') }}"
 atl_db_port: "{{ lookup('env', 'ATL_DB_PORT') or '5432' }}"
+atl_db_root_db_name: "{{ lookup('env', 'ATL_DB_ROOT_DB_NAME') or 'postgres' }}"
 atl_db_root_user: "{{ lookup('env', 'ATL_DB_ROOT_USER') or 'postgres' }}"
 atl_db_root_password: "{{ lookup('env', 'ATL_DB_ROOT_PASSWORD') }}"
 atl_db_driver: "{{ lookup('env', 'ATL_DB_DRIVER') or 'org.postgresql.Driver' }}"
@@ -133,3 +143,10 @@ atl_rds_security_group: "{{ lookup('env', 'ATL_RDS_SECURITY_GROUP') }}"
 
 atl_backup_manifest_url: "{{ lookup('env', 'ATL_BACKUP_MANIFEST_URL') }}"
 atl_restore_required: "{{ atl_backup_manifest_url is defined and atl_backup_manifest_url != '' }}"
+
+
+atl_bitbucket_license_key: "{{ lookup('env', 'ATL_BB_LICENSEKEY') }}"
+atl_bitbucket_admin_password: "{{ lookup('env', 'ATL_BB_ADMIN_PASSWORD') }}"
+
+atl_bitbucket_dataset_url: "{{ lookup('env', 'ATL_DATASET_URL') }}"
+atl_bitbucket_baseurl: "{{ lookup('env', 'ATL_BB_BASEURL') }}"

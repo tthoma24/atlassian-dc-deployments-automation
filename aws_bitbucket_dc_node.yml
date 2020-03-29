@@ -12,6 +12,7 @@
 
     atl_nfs_mountpoint: "{{ atl_shared_mountpoint }}/bitbucket/shared"
     atl_nfs_target: "{{ atl_shared_mountpoint }}/bitbucket/shared"
+    atl_nfs_version: "3"
 
     atl_startup_systemd_params:
       - "UMask=0027"
@@ -31,5 +32,9 @@
     - role: product_common
     - role: product_install
     - role: database_init
+    - role: restore_backups
     - role: bitbucket_config
     - role: product_startup
+    - role: bitbucket_dataset_restore
+  
+

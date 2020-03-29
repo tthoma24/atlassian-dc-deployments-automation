@@ -48,6 +48,11 @@ def test_cluster_file(host):
     assert f.contains('jira.shared.home = /media/atl/jira/shared')
 
 
+def test_jira_config_prop(host):
+    f = host.file('/var/atlassian/application-data/jira/jira-config.properties')
+    assert not f.exists
+
+
 def test_server_file(host):
     f = host.file('/opt/atlassian/jira-software/current/conf/server.xml')
     assert f.exists
