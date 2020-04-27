@@ -9,6 +9,7 @@
     atl_product_user: "bitbucket"
 
     atl_nfs_version: "3"
+    atl_nfs_target: "/"
 
     atl_startup_systemd_params:
       - "UMask=0027"
