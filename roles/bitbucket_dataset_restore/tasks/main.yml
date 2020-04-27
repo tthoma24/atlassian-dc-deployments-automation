@@ -18,7 +18,7 @@
     dest: "{{ atl_product_home_shared }}/data/migration/import"
 
 - name: Invoke Import API
-  uri: 
+  uri:
     url: "{{ atl_bitbucket_baseurl }}/rest/api/1.0/migration/imports"
     user: admin
     password: "{{ atl_bitbucket_admin_password }}"
@@ -30,13 +30,13 @@
     body_format: json
     return_content: yes
   register: output
-  until:  output.status == 200 
+  until:  output.status == 200
   retries: 6
   delay: 15
   failed_when: output is defined and output.json is defined and output.json.state != 'INITIALISING'
 
 - name: get import status
-  uri: 
+  uri:
     url: "{{ atl_bitbucket_baseurl }}/rest/api/1.0/migration/imports/{{ output.json.id }}"
     user: admin
     password: "{{ atl_bitbucket_admin_password }}"
@@ -50,7 +50,7 @@
   delay: 10
 
 - name: create lock file
-  file: 
+  file:
     path: "{{ atl_product_home_shared }}/data/migration/import/lock.file"
     state: touch
   when: import_status.json.state == 'COMPLETED'
