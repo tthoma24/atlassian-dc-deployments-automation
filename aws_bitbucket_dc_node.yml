@@ -8,8 +8,7 @@
     atl_product_edition: "bitbucket"
     atl_product_user: "bitbucket"
 
-    atl_nfs_version: "3"
-    atl_nfs_target: "/"
+    atl_nfs_version: "4.1"
 
     atl_startup_systemd_params:
       - "UMask=0027"
