@@ -3,7 +3,7 @@
   hosts: all
   vars:
     atl_product_user: "bitbucket"
-    atl_product_family: "stash"
+    atl_product_family: "bitbucket"
     atl_product_edition: "bitbucket"
 
     atl_aws_iam_role: "atl_aws_iam_role"

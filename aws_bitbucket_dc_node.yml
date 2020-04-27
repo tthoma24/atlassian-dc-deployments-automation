@@ -11,6 +11,8 @@
     # FIXME this is a temorary workaround to use EFS while testing abstraction
     atl_nfs_version: "4.1"
 
+    atl_product_base_url: "{{ atl_release_base_url }}/stash/downloads"
+
     atl_startup_systemd_params:
       - "UMask=0027"
       - "LimitNOFILE=4096"

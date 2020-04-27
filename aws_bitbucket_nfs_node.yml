@@ -4,7 +4,7 @@
 
   vars:
     # See group_vars/aws_node_local.yml, which pull vars from the environment.
-    atl_product_family: "stash"
+    atl_product_family: "bitbucket"
     atl_product_edition: "bitbucket"
     atl_product_user: "bitbucket"
 
