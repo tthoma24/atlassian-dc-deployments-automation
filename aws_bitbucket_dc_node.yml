@@ -4,10 +4,11 @@
 
   vars:
     # See group_vars/aws_node_local.yml, which pull vars from the environment.
-    atl_product_family: "stash"
+    atl_product_family: "bitbucket"
     atl_product_edition: "bitbucket"
     atl_product_user: "bitbucket"
 
+    # FIXME this is a temorary workaround to use EFS while testing abstraction
     atl_nfs_version: "4.1"
 
     atl_startup_systemd_params:
