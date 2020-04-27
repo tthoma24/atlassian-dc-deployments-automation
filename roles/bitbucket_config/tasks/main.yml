@@ -23,3 +23,10 @@
     mode: "u=rwX,g=rX,o=rX"
     recurse: true
   changed_when: false  # For Molecule idempotence check
+
+- name: Set the BITBUCKET_SHARED_HOME location
+  blockinfile:
+    path: "{{ atl_product_installation_versioned }}/bin/set-bitbucket-home.sh"
+    block: |
+        BITBUCKET_SHARED_HOME="{{ atl_product_home_shared }}"
+        export BITBUCKET_SHARED_HOME
