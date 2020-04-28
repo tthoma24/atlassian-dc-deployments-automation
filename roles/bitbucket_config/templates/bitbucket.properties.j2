@@ -25,12 +25,9 @@ setup.sysadmin.emailAddress=admin@yourcompany.com
 server.proxy-name={{ atl_proxy_name }}
 server.secure={{ atl_ssl_proxy }}
 server.require-ssl={{ atl_ssl_proxy }}
+server.scheme={{ atl_tomcat_scheme }}
+server.proxy-port={{ atl_proxy_port }}
 {% if atl_ssl_proxy == 'true' %}
-server.scheme=https
-server.proxy-port=443
 server.additional-connector.1.port=7991
-{% else %}
-server.scheme=http
-server.proxy-port=80
 {% endif %}
 

@@ -1,3 +1,0 @@
----
-
-elasticsearch_config_template: {{ atl_product_installation_versioned }}/elasticsearch/config-template/elasticsearch.yml

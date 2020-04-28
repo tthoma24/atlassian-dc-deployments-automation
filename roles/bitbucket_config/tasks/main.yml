@@ -30,9 +30,3 @@
     block: |
         BITBUCKET_SHARED_HOME="{{ atl_product_home_shared }}"
         export BITBUCKET_SHARED_HOME
-
-- name: Make sure elasticsearch data isn't stored in ${BITBUCKET_HOME}/shared
-  lineinfile:
-    path: '{{ elasticsearch_config_template }}'
-    line: '  data: ${BITBUCKET_HOME}/search/data'
-    regexp: '^\s{2}data:\s\$\{BITBUCKET_HOME\}\/s.+$'
