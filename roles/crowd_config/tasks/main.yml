@@ -51,7 +51,7 @@
   lineinfile:
     path: "{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh"
     insertafter: "EOF"
-    line: 'export JAVA_HOME=/usr/lib/jvm/jre-{{ java_version }}-openjdk'
+    line: "export JAVA_HOME={{ java_home | default('/usr/lib/jvm/jre-{{ java_version }}-openjdk')}}"
 
 - name: Create application directories
   file:
@@ -105,7 +105,7 @@
 - name: Assert baseurl to same as atl_proxy_name
   postgresql_query:
     login_host: "{{ atl_db_host }}"
-    login_user: "{{ atl_jdbc_user }}"
+    login_user: "{{ atl_jdbc_user_login }}"
     login_password: "{{ atl_jdbc_password }}"
     db: "{{ atl_jdbc_db_name }}"
     query: >

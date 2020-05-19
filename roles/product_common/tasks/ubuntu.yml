@@ -8,6 +8,11 @@
   tags:
     - runtime_pkg
 
+- name: Set java_home variable
+  set_fact:
+    java_home: "/usr/lib/jvm/java-{{ java_version }}-openjdk-amd64"
+  when: atl_use_system_jdk
+
 - name: Install other base packages on Ubuntu
   package:
     name:

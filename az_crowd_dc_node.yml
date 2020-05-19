@@ -1,0 +1,35 @@
+---
+- hosts: az_node_local
+  become: true
+
+  vars:
+    atl_product_family: "crowd"
+    atl_product_user: "crowd"
+    atl_product_edition: "crowd"
+    atl_use_system_jdk: true
+    atl_download_format: "tarball"
+
+    atl_startup_systemd_params:
+      - "Environment=JDBC_DRIVER={{ atl_db_driver }}"
+      - "Environment=JDBC_DIALECT=org.hibernate.dialect.PostgreSQLDialect"
+      - "Environment=JDBC_USER={{ atl_db_root_user_login }}"
+      - "Environment=JDBC_PASSWORD={{ atl_jdbc_password }}"
+      - "Environment=JDBC_URL={{ atl_jdbc_url }}"
+
+    atl_jdbc_encoding: 'UNICODE'
+    atl_jdbc_collation: 'C'
+    atl_jdbc_ctype: 'C'
+    atl_jdbc_template: 'template0'
+
+  roles:
+    - role: linux_common
+    - role: az_common
+    - role: az_shared_fs_config
+    - role: product_common
+    - role: product_install
+      tags: [skip_on_stack_update]
+    - role: database_init
+      tags: [skip_on_stack_update]
+    - role: crowd_config
+    - role: az_app_insights_install
+    - role: product_startup

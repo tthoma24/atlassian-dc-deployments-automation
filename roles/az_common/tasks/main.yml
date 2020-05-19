@@ -1,0 +1,33 @@
+---
+
+- name: Install additional support packages
+  package:
+    name:
+      - netcat
+      - rsync
+      - cifs-utils
+
+- name: Fetch VM ID
+  command: "dmidecode -s system-uuid"
+  register: az_vm_id
+  tags:
+    - runtime_pkg
+  changed_when: true
+
+- name: Use VM  ID for cluster node ID
+  set_fact:
+    atl_cluster_node_id: "{{ az_vm_id.stdout }}"
+  tags:
+    - runtime_pkg
+
+- name: Tune TCP Keep Alive
+  sysctl:
+    name: '{{ item.key }}'
+    value: '{{ item.value }}'
+    reload: yes
+    ignoreerrors: yes
+    sysctl_file: /etc/sysctl.conf
+    sysctl_set: yes
+  with_dict: '{{ sysctl_config }}'
+  tags:
+    - runtime_pkg
