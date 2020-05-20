@@ -1,0 +1,52 @@
+- name: Add an Apt signing key for MS Packages
+  apt_key:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+
+- name: Add MS repository into sources list.
+  apt_repository:
+    repo: deb [arch=amd64] https://packages.microsoft.com/ubuntu/16.04/prod xenial main
+    state: present
+
+- name: Install SQL Server utils
+  apt:
+    name: mssql-tools
+    update_cache: yes
+  environment:
+    ACCEPT_EULA: Y
+
+- name: Create sqlcmd symbolic link
+  file:
+    src: /opt/mssql-tools/bin/sqlcmd
+    dest: /usr/bin/sqlcmd
+    state: link
+
+- name: Create SQL Server DB login
+  shell: "sqlcmd -S {{ atl_db_host }} -U {{ atl_db_root_user }} -P {{ atl_db_root_password }} -Q \"CREATE LOGIN {{ atl_jdbc_user }} WITH PASSWORD = '{{ atl_jdbc_password }}'\""
+
+- name: Create SQL Server DB user
+  shell: "sqlcmd -S {{ atl_db_host }} -U {{ atl_db_root_user }} -P {{ atl_db_root_password }} -Q \"CREATE USER {{ atl_jdbc_user }} FOR LOGIN {{ atl_jdbc_user }}\""
+
+- name: Create new SQL Server application database
+  shell: "sqlcmd -S {{ atl_db_host }} -U {{ atl_db_root_user }} -P {{ atl_db_root_password }} -Q \"IF NOT EXISTS (SELECT name FROM master.sys.databases WHERE name = N'{{ atl_jdbc_db_name }}') CREATE DATABASE {{ atl_jdbc_db_name }} COLLATE {{ atl_db_sql_collation }}\""
+
+- name: Create SQL Server DB user on application database
+  shell: "sqlcmd -S {{ atl_db_host }} -U {{ atl_db_root_user }} -P {{ atl_db_root_password }} -d {{ atl_jdbc_db_name }} -Q \"CREATE USER {{ atl_jdbc_user }} FOR LOGIN {{ atl_jdbc_user }}\""
+
+- name: Update db_owner role for new user on application database
+  shell: "sqlcmd -S {{ atl_db_host }} -U {{ atl_db_root_user }} -P {{ atl_db_root_password }} -d {{ atl_jdbc_db_name }} -Q \"ALTER ROLE db_owner ADD MEMBER {{ atl_jdbc_user }}\""
+
+- name: Update isolation level on application database
+  shell: "sqlcmd -S {{ atl_db_host }} -U {{ atl_db_root_user }} -P {{ atl_db_root_password }} -Q \"ALTER DATABASE {{ atl_jdbc_db_name }} SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK IMMEDIATE\""
+
+- name: Tune TCP Keep Alive
+  sysctl:
+    name: '{{ item.key }}'
+    value: '{{ item.value }}'
+    reload: yes
+    ignoreerrors: yes
+    sysctl_file: /etc/sysctl.conf
+    sysctl_set: yes
+  with_dict: '{{ sysctl_config }}'
+  tags:
+    - runtime_pkg

@@ -5,6 +5,13 @@
     name:
       - collectd
 
+- name: Download Collectd App Insights jar
+  get_url:
+    url: "https://github.com/Microsoft/ApplicationInsights-Java/releases/download/{{ app_insights_version }}/{{ item }}"
+    dest: "/usr/share/collectd/java/applicationinsights-collectd-{{ app_insights_version }}.jar"
+  with_items:
+    - "applicationinsights-collectd-{{ app_insights_version }}.jar"
+
 - name: Configure Collectd
   template: src=collectd.conf.j2 dest=/etc/collectd/collectd.conf
   notify:
@@ -20,27 +27,45 @@
     url: "https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/{{ app_insights_jaxb_version }}/jaxb-api-{{ app_insights_jaxb_version }}.jar"
     dest: "/usr/share/collectd/java/"
 
-# - name: Download App Insights jars
-#  get_url:
-#    url: "https://github.com/Microsoft/ApplicationInsights-Java/releases/download/{{ app_insights_version }}/{{ item }}"
-#    dest: "{{ atl_product_installation_versioned }}/crowd-webapp/WEB-INF/lib/"
-#  with_items:
-#    - "applicationinsights-core-{{ app_insights_version }}.jar"
-#    - "applicationinsights-web-{{ app_insights_version }}.jar"
-#    - "applicationinsights-collectd-{{ app_insights_version }}.jar"
-#
-# - name: Copy applicationinsights-collectd to collectd
-#  copy:
-#    src: "{{ atl_product_installation_versioned }}/crowd-webapp/WEB-INF/lib/applicationinsights-collectd-{{ app_insights_version }}.jar"
-#    dest: "/usr/share/collectd/java/applicationinsights-collectd-{{ app_insights_version }}.jar"
-#    remote_src: true
-#
-# - name: Add ApplicationInsights.xml configuration
-#  template: src=ApplicationInsights.xml.j2 dest={{ atl_product_installation_versioned }}/crowd-webapp/WEB-INF/classes/ApplicationInsights.xml
-
-- name: Download applicationinsights-collectd to collectd
+- name: Download App Insights jars
   get_url:
     url: "https://github.com/Microsoft/ApplicationInsights-Java/releases/download/{{ app_insights_version }}/{{ item }}"
-    dest: "/usr/share/collectd/java/applicationinsights-collectd-{{ app_insights_version }}.jar"
+    dest: "{{ atl_product_installation_versioned }}/crowd-webapp/WEB-INF/lib/"
   with_items:
-    - "applicationinsights-collectd-{{ app_insights_version }}.jar"
+    - "applicationinsights-core-{{ app_insights_version }}.jar"
+    - "applicationinsights-web-{{ app_insights_version }}.jar"
+    - "applicationinsights-agent-{{ app_insights_version }}.jar"
+
+- name: Add java agent to JAVA_OPTS
+  lineinfile:
+    path: "{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh"
+    regexp: '^export JAVA_OPTS'
+    line: "export JAVA_OPTS=\"$JAVA_OPTS -javaagent:{{ atl_product_installation_versioned }}\
+    /crowd-webapp/WEB-INF/lib/applicationinsights-agent-{{ app_insights_version }}.jar\""
+
+- name: Add ApplicationInsights.xml configuration
+  template: src=ApplicationInsights.xml.j2 dest={{ atl_product_installation_versioned }}/crowd-webapp/WEB-INF/classes/ApplicationInsights.xml
+
+- name: Check for existing App Insights Filter
+  xml:
+    path: "/opt/atlassian/crowd/current/crowd-webapp/WEB-INF/web.xml"
+    xpath: //*[.="ApplicationInsightsWebFilter"]
+    count: yes
+  register: appInsightsFilter
+
+- name: Add App Insights Filter
+  xml:
+    path: "/opt/atlassian/crowd/current/crowd-webapp/WEB-INF/web.xml"
+    xpath: /*[name()='web-app']
+    input_type: xml
+    pretty_print: yes
+    add_children:
+      - "<filter>\
+           <filter-name>ApplicationInsightsWebFilter</filter-name>\
+           <filter-class>com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter</filter-class>\
+         </filter>"
+      - "<filter-mapping>\
+           <filter-name>ApplicationInsightsWebFilter</filter-name>\
+           <url-pattern>/*</url-pattern>\
+         </filter-mapping>"
+  when: appInsightsFilter.count < 1

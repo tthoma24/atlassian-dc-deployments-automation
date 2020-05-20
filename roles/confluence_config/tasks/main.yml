@@ -1,5 +1,11 @@
 ---
 
+- debug:
+    msg: atl_db_engine {{ atl_db_engine }}
+
+- debug:
+    msg: atl_dbms {{ atl_dbms }}
+
 - name: Create application directories
   file:
     path: "{{ item }}"

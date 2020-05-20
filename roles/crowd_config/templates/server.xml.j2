@@ -4,10 +4,6 @@
         shutdown="SHUTDOWN">
 
     <Service name="Catalina">
-<!-- Add the SSL properties when the load balancer is configured
-                   secure="{{ atl_tomcat_secure }}"
-                scheme="{{ atl_tomcat_scheme }}"
- -->
         <Connector acceptCount="{{ atl_tomcat_acceptcount }}"
                    connectionTimeout="{{ atl_tomcat_connectiontimeout }}"
                    disableUploadTimeout="true"
@@ -22,8 +18,14 @@
                    compression="on"
                    sendReasonPhrase="true"
                    compressableMimeType="text/html,text/xml,application/xml,text/plain,text/css,application/json,application/javascript,application/x-javascript"
-                   proxyName="{{ atl_proxy_name }}"
-                   proxyPort="{{ atl_proxy_port }}"
+                   secure="{{ atl_tomcat_secure }}"
+                   scheme="{{ atl_tomcat_scheme }}"
+                   {% if atl_proxy_name is defined and atl_proxy_name != '' %}
+                    proxyName="{{ atl_proxy_name }}"
+                   {% endif %}
+                   {% if atl_proxy_port is defined and atl_proxy_port != '' %}
+                    proxyPort="{{ atl_proxy_port }}"
+                   {% endif %}
                    protocol="{{ atl_tomcat_protocol }}">
         </Connector>
 
@@ -50,6 +52,7 @@
                        redirectPort="{{ atl_tomcat_redirectport }}"
                        protocol=""AJP/1.3"" />
         -->
+        {% if atl_tomcat_redirectport is defined and atl_tomcat_redirectport != '' %}
         <Connector port="{{ atl_tomcat_redirectport }}"
                    protocol="{{ atl_tomcat_protocol }}"
                    relaxedPathChars="[]|"
@@ -61,6 +64,7 @@
                    compression="on"
                    compressableMimeType="text/html,text/xml,text/plain,text/css,application/json,application/javascript,application/x-javascript">
         </Connector>
+        {% endif %}
     </Service>
 
     <!-- Security listener. Documentation at /docs/config/listeners.html

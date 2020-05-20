@@ -1,7 +1,0 @@
----
-# Values taken from https://docs.microsoft.com/en-us/sql/connect/jdbc/connecting-to-an-azure-sql-database
-# Windows values are milliseconds, Linux values are seconds
-sysctl_config:
-  net.ipv4.tcp_keepalive_time: 30
-  net.ipv4.tcp_keepalive_intvl: 1
-  net.ipv6.tcp_keepalive_probes: 10
