@@ -1,4 +1,4 @@
 ---
 
-- name: Initialise database
-  include_tasks: "{{ atl_db_engine|lower }}.yml"
+- name: Initialise database 
+  include_tasks: "{{ atl_jdbc_engine_map[atl_db_engine] }}.yml" # TODO this is done to have same tasks for aurora and postgres
