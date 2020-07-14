@@ -100,11 +100,16 @@
     - "{{ atl_product_installation_versioned }}/work"
   changed_when: false  # For Molecule idempotence check
 
-- name: Assert baseurl to same as atl_proxy_name
+- name: Do something with stuff
+  debug: "{{ item }}"
+  with_items: stuff.stdout_lines
+
+- name: Assert baseurl to same as atl_proxy_name (PostgreSQL)
   postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_jdbc_user }}"
     login_password: "{{ atl_jdbc_password }}"
+    port: "{{ atl_db_port }}"
     db: "{{ atl_jdbc_db_name }}"
     query: >
       update propertystring set propertyvalue=%s
@@ -115,6 +120,23 @@
     - atl_proxy_name is defined
     - atl_tomcat_scheme is defined
     - db_created is undefined or not db_created.changed
+    - atl_jdbc_engine_map[atl_db_engine] = 'postgres'
+  tags:
+    - skip_on_stack_update
+  ignore_errors: yes  # For Molecule as it has no db test framework included
+  
+
+  - name: Assert baseurl to same as atl_proxy_name (MySQL)
+    command: >
+      mysql --user={{ atl_jdbc_user }} --password={{ atl_jdbc_password }} {{ atl_jdbc_db_name }}
+      --host={{ atl_db_host }} --port={{ atl_db_port }} --batch --skip-column-names
+      --execute="update propertystring set propertyvalue="{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}"
+        where id=(select id from propertyentry where property_key = 'jira.baseurl')"
+  when:
+    - atl_proxy_name is defined
+    - atl_tomcat_scheme is defined
+    - db_created is undefined or not db_created.changed
+    - atl_jdbc_engine_map[atl_db_engine] = 'mysql'
   tags:
     - skip_on_stack_update
   ignore_errors: yes  # For Molecule as it has no db test framework included

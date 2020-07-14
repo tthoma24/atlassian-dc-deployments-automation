@@ -31,20 +31,18 @@
         login_password: "{{ atl_db_root_password }}"
         login_port: "{{ atl_db_port }}"
         name: "{{ atl_jdbc_db_name }}"
-        encoding: "{{ atl_jdbc_encoding }}"
-        collation: "{{ atl_jdbc_collation }}"
+        encoding: "utf8" # TODO "{{ atl_jdbc_encoding }}"
+        collation: "utf8_bin" # TODO "{{ atl_jdbc_collation }}"
       register: db_created 
 
   tags:
     - new_only
 
-# - name: Assert ownership of public schema
-#   postgresql_query:
-#     login_host: "{{ atl_db_host }}"
-#     login_user: "{{ atl_db_root_user }}"
-#     login_password: "{{ atl_db_root_password }}"
-#     db: "{{ atl_jdbc_db_name }}"
-#     query: "ALTER SCHEMA public OWNER to {{ atl_db_root_user }};"
+- name: Assert ownership of public schema
+  command: >
+    mysql --user={{ atl_jdbc_user }} --password={{ atl_jdbc_password }} {{ atl_jdbc_db_name }}
+    --host={{ atl_db_host }} --port={{ atl_db_port }} --batch --skip-column-names
+    --execute="GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX on {{ atl_jdbc_db_name }}.* TO '{{ atl_jdbc_user }}'@'{{ atl_db_host }}' IDENTIFIED BY '{{ atl_jdbc_password }}'; flush privileges;"
 
 # - name: Grant privs to root user on public schema
 #   postgresql_query:
