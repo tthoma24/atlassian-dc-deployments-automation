@@ -120,7 +120,7 @@
     - atl_proxy_name is defined
     - atl_tomcat_scheme is defined
     - db_created is undefined or not db_created.changed
-    - atl_jdbc_engine_map[atl_db_engine] = 'postgres'
+    - atl_jdbc_engine_map[atl_db_engine] is 'postgres'
   tags:
     - skip_on_stack_update
   ignore_errors: yes  # For Molecule as it has no db test framework included
@@ -136,7 +136,7 @@
     - atl_proxy_name is defined
     - atl_tomcat_scheme is defined
     - db_created is undefined or not db_created.changed
-    - atl_jdbc_engine_map[atl_db_engine] = 'mysql'
+    - atl_jdbc_engine_map[atl_db_engine] is 'mysql'
   tags:
     - skip_on_stack_update
   ignore_errors: yes  # For Molecule as it has no db test framework included

@@ -35,14 +35,17 @@
         collation: "utf8_bin" # TODO "{{ atl_jdbc_collation }}"
       register: db_created 
 
+    - name: Assert ownership of public schema
+      command: >
+        mysql --user={{ atl_db_root_user }} --password={{ atl_db_root_password }} {{ atl_jdbc_db_name }}
+        --host={{ atl_db_host }} --port={{ atl_db_port }} --batch --skip-column-names
+        --execute="GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX on {{ atl_jdbc_db_name }}.* TO '{{ atl_jdbc_user }}'@'{{ atl_db_host }}' IDENTIFIED BY '{{ atl_jdbc_password }}'; flush privileges;"
+      no_log: true
+
   tags:
     - new_only
 
-- name: Assert ownership of public schema
-  command: >
-    mysql --user={{ atl_jdbc_user }} --password={{ atl_jdbc_password }} {{ atl_jdbc_db_name }}
-    --host={{ atl_db_host }} --port={{ atl_db_port }} --batch --skip-column-names
-    --execute="GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX on {{ atl_jdbc_db_name }}.* TO '{{ atl_jdbc_user }}'@'{{ atl_db_host }}' IDENTIFIED BY '{{ atl_jdbc_password }}'; flush privileges;"
+
 
 # - name: Grant privs to root user on public schema
 #   postgresql_query:
