@@ -18,13 +18,10 @@
     dest: /tmp
     remote_src: yes
 
-- name: Copy file with owner and permissions
+- name: Copy the MySQL driver
   copy:
     src: /tmp/mysql-connector-java-8.0.21/mysql-connector-java-8.0.21.jar
     dest: "{{ atl_product_installation_versioned }}/lib"
-    owner: foo
-    group: foo
-    mode: '0644'
 
 - name: Create application DB user
   mysql_user:
