@@ -126,12 +126,12 @@
   ignore_errors: yes  # For Molecule as it has no db test framework included
   
 
-  - name: Assert baseurl to same as atl_proxy_name (MySQL)
-    command: >
-      mysql --user={{ atl_jdbc_user }} --password={{ atl_jdbc_password }} {{ atl_jdbc_db_name }}
-      --host={{ atl_db_host }} --port={{ atl_db_port }} --batch --skip-column-names
-      --execute="update propertystring set propertyvalue="{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}"
-        where id=(select id from propertyentry where property_key = 'jira.baseurl')"
+- name: Assert baseurl to same as atl_proxy_name (MySQL)
+  command: >
+    mysql --user={{ atl_jdbc_user }} --password={{ atl_jdbc_password }} {{ atl_jdbc_db_name }}
+    --host={{ atl_db_host }} --port={{ atl_db_port }} --batch --skip-column-names
+    --execute="update propertystring set propertyvalue="{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}"
+      where id=(select id from propertyentry where property_key = 'jira.baseurl')"
   when:
     - atl_proxy_name is defined
     - atl_tomcat_scheme is defined
