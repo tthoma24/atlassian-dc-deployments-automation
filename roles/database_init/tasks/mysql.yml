@@ -12,6 +12,16 @@
     name: pymysql
     state: present
 
+- name: Download MySQL driver
+  get_url:
+    url: https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.21.tar.gz
+    dest: /tmp/mysql_driver.tar.gz
+
+- name: Unzip MySQL driver
+  unarchive:
+    src: /tmp/mysql_driver.tar.gz
+    dest: "{{ atl_product_installation_versioned }}/lib"
+
 - name: Create application DB user
   mysql_user:
     login_host: "{{ atl_db_host }}"
