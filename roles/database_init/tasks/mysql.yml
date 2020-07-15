@@ -12,15 +12,19 @@
     name: pymysql
     state: present
 
-- name: Download MySQL driver
-  get_url:
-    url: https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.21.tar.gz
-    dest: /tmp/mysql_driver.tar.gz
-
-- name: Unzip MySQL driver
+- name: Download and unzip MySQL driver
   unarchive:
-    src: /tmp/mysql_driver.tar.gz
+    src: https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.21.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy file with owner and permissions
+  copy:
+    src: /tmp/mysql-connector-java-8.0.21/mysql-connector-java-8.0.21.jar
     dest: "{{ atl_product_installation_versioned }}/lib"
+    owner: foo
+    group: foo
+    mode: '0644'
 
 - name: Create application DB user
   mysql_user:
