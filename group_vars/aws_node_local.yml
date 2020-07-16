@@ -100,6 +100,11 @@ atl_db_engine_to_db_type_map:
   rds_postgres: "postgres72"
   rds_mysql: "mysql57"
 atl_db_type: "{{ atl_db_engine_to_db_type_map[atl_db_engine] | default('postgres72') }}"
+atl_db_general_type_map:
+  aurora_postgres: "postgres"
+  rds_postgres: "postgres"
+  rds_mysql: "mysql"
+atl_db_general_type: "{{ atl_db_general_type_map[atl_db_engine] }}"
 
 atl_jdbc_db_name: "{{ lookup('env', 'ATL_JDBC_DB_NAME') }}"
 atl_jdbc_user: "{{ lookup('env', 'ATL_JDBC_USER') }}"
@@ -111,11 +116,7 @@ atl_jdbc_template: "{{ lookup('env', 'ATL_JDBC_TEMPLATE') or 'template1' }}"
 atl_jdbc_query_params_for_engine:
   aurora_postgres: "?targetServerType=master"
   rds_mysql: "?useUnicode=true&amp;characterEncoding=UTF8&amp;sessionVariables=default_storage_engine=InnoDB"
-atl_jdbc_engine_map:
-  aurora_postgres: "postgres"
-  rds_postgres: "postgres"
-  rds_mysql: "mysql"
-atl_jdbc_url: "jdbc:{{ atl_jdbc_engine_map[atl_db_engine] }}://{{ atl_db_host }}:{{ atl_db_port }}/{{ atl_jdbc_db_name }}{{ atl_jdbc_query_params_for_engine[atl_db_engine]| default('') }}"
+atl_jdbc_url: "jdbc:{{ atl_db_general_type }}://{{ atl_db_host }}:{{ atl_db_port }}/{{ atl_jdbc_db_name }}{{ atl_jdbc_query_params_for_engine[atl_db_engine]| default('') }}"
 
 atl_jvm_heap: "{{ lookup('env', 'ATL_JVM_HEAP') or '2048m' }}"
 atl_jvm_opts: "{{ lookup('env', 'ATL_JVM_OPTS') or '' }}"
