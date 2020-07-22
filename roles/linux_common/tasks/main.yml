@@ -14,7 +14,6 @@
       - unzip
       - fontconfig
       - python-psycopg2
-      - python-lxml
 
 - name: Create product group
   group:

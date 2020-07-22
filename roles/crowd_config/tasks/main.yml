@@ -47,11 +47,12 @@
     insertbefore: "^export CATALINA_OPTS$"
     marker: "# {mark} ANSIBLE MANAGED CATALINA_OPTS"
 
+# Crowd uses the system jdk installed (atl_use_system_jdk == true) rather than a packaged JDK
 - name: Set JAVA_HOME
   lineinfile:
     path: "{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh"
     insertafter: "EOF"
-    line: "export JAVA_HOME={{ java_home | default('/usr/lib/jvm/jre-{{ java_version }}-openjdk') }}"
+    line: "export JAVA_HOME={{ system_java_home }}"
 
 - name: Create application directories
   file:
@@ -114,6 +115,7 @@
     positional_args:
       - "{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}/crowd"
   when:
+    - atl_db_engine == "postgres"
     - atl_proxy_name is defined
     - atl_tomcat_scheme is defined
     - db_created is undefined or not db_created.changed

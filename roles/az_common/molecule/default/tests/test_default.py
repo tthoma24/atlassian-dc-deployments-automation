@@ -9,7 +9,8 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 @pytest.mark.parametrize('pkg', [
   'netcat',
   'rsync',
-  'cifs-utils'
+  'cifs-utils',
+  'python-lxml'
 ])
 def test_pkg(host, pkg):
     package = host.package(pkg)

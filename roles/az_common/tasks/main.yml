@@ -6,6 +6,7 @@
       - netcat
       - rsync
       - cifs-utils
+      - python-lxml
 
 - name: Fetch VM ID
   command: "dmidecode -s system-uuid"
