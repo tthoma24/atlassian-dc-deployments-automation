@@ -1,7 +1,7 @@
 ---
 
 - name: debug message
-  debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret', region=atl_aws_region) }}"
+  debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret', region='atl_aws_region') }}"
 
 - name: Create application DB user
   postgresql_user:
