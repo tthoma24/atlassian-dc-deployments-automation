@@ -10,6 +10,9 @@
     password: "{{ atl_jdbc_password }}"
     expires: 'infinity'
 
+- debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret') }}"
+
+
 - name: Collect dbcluster db_names
   postgresql_query:
     login_host: "{{ atl_db_host }}"
