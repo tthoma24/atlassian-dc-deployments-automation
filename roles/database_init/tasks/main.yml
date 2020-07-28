@@ -1,6 +1,7 @@
 ---
 
-- debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret') }}"
+- name: debug message
+  debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret') }}"
 
 - name: Create application DB user
   postgresql_user:
