@@ -1,5 +1,7 @@
 ---
 
+- debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret') }}"
+
 - name: Create application DB user
   postgresql_user:
     login_host: "{{ atl_db_host }}"
@@ -9,9 +11,6 @@
     name: "{{ atl_jdbc_user }}"
     password: "{{ atl_jdbc_password }}"
     expires: 'infinity'
-
-- debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret') }}"
-
 
 - name: Collect dbcluster db_names
   postgresql_query:
