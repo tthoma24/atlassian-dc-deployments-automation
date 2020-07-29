@@ -1,13 +1,14 @@
 ---
 
-- name: debug message
-  debug: msg="{{ lookup('aws_secret','atl_db_root_password_secret', region='atl_aws_region') }}"
+#- name: debug message
+ # debug: msg="{{ (lookup('aws_secret', atl_db_root_password_secret, region=atl_aws_region) | from_json.get('password')) }}"
 
 - name: Create application DB user
   postgresql_user:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
-    login_password: "{{ atl_db_root_password }}"
+    #login_password: "{{ atl_db_root_password }}"
+    login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     port: "{{ atl_db_port }}"
     name: "{{ atl_jdbc_user }}"
     password: "{{ atl_jdbc_password }}"
@@ -17,7 +18,8 @@
   postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
-    login_password: "{{ atl_db_root_password }}"
+    #login_password: "{{ atl_db_root_password }}"
+    login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     db: "{{ atl_db_root_db_name }}"
     query: "SELECT datname FROM pg_database;"
   register: dbcluster_db_names
@@ -28,7 +30,8 @@
       postgresql_privs:
         login_host: "{{ atl_db_host }}"
         login_user: "{{ atl_db_root_user }}"
-        login_password: "{{ atl_db_root_password }}"
+        #login_password: "{{ atl_db_root_password }}"
+        login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
         database: postgres
         roles: "{{ atl_db_root_user }}"
         objs: "{{ atl_jdbc_user }}"
@@ -39,7 +42,8 @@
       postgresql_db:
         login_host: "{{ atl_db_host }}"
         login_user: "{{ atl_db_root_user }}"
-        login_password: "{{ atl_db_root_password }}"
+        #login_password: "{{ atl_db_root_password }}"
+        login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
         port: "{{ atl_db_port }}"
         name: "{{ atl_jdbc_db_name }}"
         owner: "{{ atl_jdbc_user }}"
@@ -57,7 +61,8 @@
   postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
-    login_password: "{{ atl_db_root_password }}"
+    #login_password: "{{ atl_db_root_password }}"
+    login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     db: "{{ atl_jdbc_db_name }}"
     query: "ALTER SCHEMA public OWNER to {{ atl_db_root_user }};"
 
@@ -65,7 +70,8 @@
   postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
-    login_password: "{{ atl_db_root_password }}"
+    #login_password: "{{ atl_db_root_password }}"
+    login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     db: "{{ atl_jdbc_db_name }}"
     query: "GRANT ALL ON SCHEMA public TO {{ atl_db_root_user }};"
 
@@ -73,6 +79,7 @@
   postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
-    login_password: "{{ atl_db_root_password }}"
+    #login_password: "{{ atl_db_root_password }}"
+    login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     db: "{{ atl_jdbc_db_name }}"
     query: "GRANT ALL ON SCHEMA public TO {{ atl_jdbc_user }};"
