@@ -11,7 +11,7 @@
     login_password: "{{ (lookup('aws_secret',atl_db_root_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     port: "{{ atl_db_port }}"
     name: "{{ atl_jdbc_user }}"
-    password: "{{ atl_jdbc_password }}"
+    password: "{{ (lookup('aws_secret',atl_jdbc_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     expires: 'infinity'
 
 - name: Collect dbcluster db_names
