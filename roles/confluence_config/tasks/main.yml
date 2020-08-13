@@ -1,5 +1,8 @@
 ---
 
+- name: debug message
+  debug: msg="{{ lookup('template', './confluence.cfg.xml.j2') }} will return the contents from evaluation of this template"
+
 - name: Create application directories
   file:
     path: "{{ item }}"
