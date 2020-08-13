@@ -1,7 +1,7 @@
 ---
 
-- name: debug message
-  debug: msg="{{ lookup('template', './confluence.cfg.xml.j2') }} will return the contents from evaluation of this template"
+#- name: debug message
+#  debug: msg="{{ lookup('template', './confluence.cfg.xml.j2') }} will return the contents from evaluation of this template"
 
 - name: Create application directories
   file:
@@ -104,7 +104,7 @@
   postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_jdbc_user }}"
-    login_password: "{{ atl_jdbc_password }}"
+    login_password: "{{ lookup('aws_secret',atl_jdbc_password_secret, region=atl_aws_region) | from_json | json_query('password')) }}"
     db: "{{ atl_jdbc_db_name }}"
     query: >
       update bandana set bandanavalue=regexp_replace(bandanavalue, %s, %s)
