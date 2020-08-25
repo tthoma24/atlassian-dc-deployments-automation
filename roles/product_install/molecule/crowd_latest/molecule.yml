@@ -17,7 +17,7 @@ platforms:
   - name: ubuntu_lts_azure
     image: ubuntu:bionic
     groups:
-      - az_node_local
+      - azure_node_local
 provisioner:
   name: ansible
   options:

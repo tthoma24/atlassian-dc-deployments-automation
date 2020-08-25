@@ -1,5 +1,5 @@
 ---
-- hosts: az_node_local
+- hosts: azure_node_local
   become: true
 
   vars:
@@ -23,13 +23,13 @@
 
   roles:
     - role: linux_common
-    - role: az_common
-    - role: az_shared_fs_config
+    - role: azure_common
+    - role: azure_shared_fs_config
     - role: product_common
     - role: product_install
       tags: [skip_on_stack_update]
     - role: database_init
       tags: [skip_on_stack_update]
     - role: crowd_config
-    - role: az_app_insights_install
+    - role: azure_app_insights_install
     - role: product_startup

@@ -10,13 +10,13 @@
 
 - name: Fetch VM ID
   command: "dmidecode -s system-uuid"
-  register: az_vm_id
+  register: azure_vm_id
   tags:
     - runtime_pkg
   changed_when: true
 
 - name: Use VM  ID for cluster node ID
   set_fact:
-    atl_cluster_node_id: "{{ az_vm_id.stdout }}"
+    atl_cluster_node_id: "{{ azure_vm_id.stdout }}"
   tags:
     - runtime_pkg

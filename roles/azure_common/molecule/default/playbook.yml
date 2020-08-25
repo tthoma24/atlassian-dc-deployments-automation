@@ -20,4 +20,4 @@
     atl_proxy_port: "80"
 
   roles:
-    - role: az_common
+    - role: azure_common

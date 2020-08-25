@@ -1,0 +1,9 @@
+---
+azure_storage_account: "{{ lookup('env', 'AZURE_STORAGE_ACCOUNT') }}"
+azure_storage_key: "{{ lookup('env', 'AZURE_STORAGE_KEY') }}"
+
+efs_target: "//{{ azure_storage_account }}.file.core.windows.net"
+
+efs_type: "cifs"
+efs_src_dir: "{{ lookup('env', 'ATL_CROWD_SHARED_HOME_NAME') or 'crowd-home' }}"
+efs_mount_options: "vers=3.0,uid=0,gid=0,dir_mode=0777,file_mode=077,username={{ azure_storage_account }},password={{ azure_storage_key }}"

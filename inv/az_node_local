@@ -1,2 +1,2 @@
-[az_node_local]
+[azure_node_local]
 localhost ansible_connection=local

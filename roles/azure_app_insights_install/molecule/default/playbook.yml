@@ -8,7 +8,7 @@
     atl_download_format: "tarball"
   roles:
     - role: linux_common
-    - role: az_common
+    - role: azure_common
     - role: product_common
     - role: product_install
-    - role: az_app_insights_install
+    - role: azure_app_insights_install
