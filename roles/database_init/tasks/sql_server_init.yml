@@ -47,6 +47,6 @@
     ignoreerrors: yes
     sysctl_file: /etc/sysctl.conf
     sysctl_set: yes
-  with_dict: '{{ sysctl_config }}'
+  with_dict: '{{ azure_sql_server_sysctl }}'
   tags:
     - runtime_pkg
