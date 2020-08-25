@@ -47,12 +47,11 @@
     insertbefore: "^export CATALINA_OPTS$"
     marker: "# {mark} ANSIBLE MANAGED CATALINA_OPTS"
 
-# Crowd uses the system jdk installed (atl_use_system_jdk == true) rather than a packaged JDK
 - name: Set JAVA_HOME
   lineinfile:
     path: "{{ atl_product_installation_versioned }}/apache-tomcat/bin/setenv.sh"
     insertafter: "EOF"
-    line: "export JAVA_HOME={{ system_java_home }}"
+    line: "export JAVA_HOME={{ atl_java_home }}"
 
 - name: Create application directories
   file:

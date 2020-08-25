@@ -3,12 +3,7 @@
 - name: Install JDK if necessary on Amazon Linux
   yum:
     name:
-      - java-{{ java_version }}-openjdk-devel
-  when: atl_use_system_jdk
-
-- name: Set system_java_home variable
-  set_fact:
-    system_java_home: "/usr/lib/jvm/jre-{{ java_version }}-openjdk"
+      - java-1.{{ java_major_version }}.0-openjdk-devel
   when: atl_use_system_jdk
 
 - name: Install other base packages on Amazon Linux
