@@ -123,7 +123,7 @@
     positional_args:
       - "{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}/crowd"
   when:
-    - atl_db_engine == "postgres"
+    - atl_db_engine == "rds_postgres"
     - atl_proxy_name is defined
     - atl_tomcat_scheme is defined
     - db_created is undefined or not db_created.changed
