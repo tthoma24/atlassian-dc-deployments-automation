@@ -1,3 +1,4 @@
+---
 
 - name: "Set the systemd_dir"
   set_fact:
@@ -5,12 +6,12 @@
 
 - name: "systemd_dir debug"
   debug:
-    msg: "systemd_dir {{systemd_dir}}"
+    msg: "systemd_dir {{ systemd_dir }}"
 
 - name: "Install systemd service file"
   template:
     src: "product.service.j2"
-    dest: "{{systemd_dir}}/{{ atl_systemd_service_name }}"
+    dest: "{{ systemd_dir }}/{{ atl_systemd_service_name }}"
     owner: root
     group: root
     mode: 0640

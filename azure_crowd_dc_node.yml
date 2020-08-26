@@ -12,12 +12,12 @@
     atl_startup_systemd_params:
       - "Environment=JDBC_DRIVER={{ atl_db_driver }}"
       - "Environment=JDBC_DIALECT={{atl_jdbc_dialect}}"
-      - "Environment=JDBC_USER={{ atl_jdbc_user_login }}"
+      - "Environment=JDBC_USER={{ atl_jdbc_user }}"
       - "Environment=JDBC_PASSWORD={{ atl_jdbc_password }}"
       - "Environment=JDBC_URL={{ atl_jdbc_url }}"
 
     atl_jdbc_encoding: 'UNICODE'
-    atl_jdbc_collation: 'C'
+    atl_jdbc_collation: 'Latin1_General_CS_AS'
     atl_jdbc_ctype: 'C'
     atl_jdbc_template: 'template0'
 
