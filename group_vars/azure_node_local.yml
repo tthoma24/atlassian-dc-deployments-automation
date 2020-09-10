@@ -1,4 +1,4 @@
 atl_jdbc_query_params_for_engine:
   rds_postgres: "?sslmode=require"
-atl_db_root_user_login: "{{ atl_db_root_user+'@'+atl_db_host if atl_db_host is search('postgres.database.azure.com') else atl_db_root_user }}"
-atl_jdbc_user_login: "{{ atl_jdbc_user+'@'+atl_db_host if atl_db_host is search('postgres.database.azure.com') else atl_jdbc_user }}"
+atl_db_root_user_login: "{{ atl_db_root_user+'@'+atl_db_host if atl_db_engine == 'rds_postgres' else atl_db_root_user }}"
+atl_jdbc_user_login: "{{ atl_jdbc_user+'@'+atl_db_host if atl_db_engine == 'rds_postgres' else atl_jdbc_user }}"

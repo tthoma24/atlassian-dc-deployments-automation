@@ -17,7 +17,7 @@
       - "Environment=JDBC_URL={{ atl_jdbc_url }}"
 
     atl_jdbc_encoding: 'UNICODE'
-    atl_jdbc_collation: 'Latin1_General_CS_AS'
+    atl_jdbc_collation: "{{ 'C' if atl_db_engine == 'rds_postgres' else 'Latin1_General_CS_AS' }}"
     atl_jdbc_ctype: 'C'
     atl_jdbc_template: 'template0'
 
