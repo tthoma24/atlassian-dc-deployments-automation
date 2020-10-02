@@ -1,5 +1,5 @@
 ---
 
 app_insights_version: "{{ lookup('env', 'APPINSIGHTS_VER') or '2.6.0' }}"
-app_insights_instrumentation_key: "{{ lookup('env', 'APPINSIGHTS_INSTRUMENTATION_KEY') or 'XXX' }}"
+app_insights_instrumentation_key: "{{ lookup('env', 'APPINSIGHTS_INSTRUMENTATION_KEY') }}"
 app_insights_jaxb_version: 2.3.1

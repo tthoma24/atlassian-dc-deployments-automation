@@ -1,9 +1,27 @@
 ---
 
-- name: Install collectd for app insights
+- name: Install supporting packages for for app insights
   package:
     name:
       - collectd
+      - wget
+      - cron
+
+- name: Download OMS Agent
+  get_url:
+    url: "https://raw.githubusercontent.com/Microsoft/OMS-Agent-for-Linux/master/installer/scripts/onboard_agent.sh"
+    dest: "{{ atl_product_installation_versioned }}"
+    mode: 0755
+
+- name: Check that the OMS Agent is already installed
+  stat:
+    path: /opt/microsoft/omsagent/bin/omsagent.sh
+  register: existing_oms_agent
+
+- name: Install OMS Agent
+  command: "{{ atl_product_installation_versioned }}/onboard_agent.sh -w {{ oms_workspace_id }} -s {{ oms_primary_key }} -d opinsights.azure.com"
+  when: existing_oms_agent.stat.isreg is not defined
+  changed_when: false  # For Molecule idempotence check
 
 - name: Download Collectd App Insights jar
   get_url:

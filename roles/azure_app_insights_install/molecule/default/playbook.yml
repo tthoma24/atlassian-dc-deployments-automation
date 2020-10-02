@@ -6,6 +6,10 @@
     atl_product_edition: "crowd"
     atl_product_user: "crowd"
     atl_download_format: "tarball"
+    atl_installer_temp: "/opt/atlassian/temp"
+    app_insights_instrumentation_key: "XXX"
+    oms_workspace_id: eae544ea-e9ea-4613-8f51-bbe2a234952e
+    oms_primary_key: rvNMv4enI3YGjqOJ29/Xv7nsAXDAUYmQhGfxJChmylk2dCvYLAcuTs1fVTOQ3OEHXKFjNMwwZtzKBop0KCRoBg==
   roles:
     - role: linux_common
     - role: azure_common

@@ -32,4 +32,5 @@
       tags: [skip_on_stack_update]
     - role: crowd_config
     - role: azure_app_insights_install
+      when: (app_insights_instrumentation_key is defined) and (app_insights_instrumentation_key|length > 0)
     - role: product_startup
