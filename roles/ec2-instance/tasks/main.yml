@@ -24,6 +24,7 @@
     group_id: "{{ sg.group_id }}"
     vpc_subnet_id: "{{ subnet.subnet.id }}"
     assign_public_ip: True
+    termination_protection: "{{ ec2_termination_protection }}"
     volumes:
       - device_name: /dev/xvda
         volume_type: gp2

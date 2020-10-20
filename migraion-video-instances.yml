@@ -9,8 +9,8 @@
     business_unit: "Engineering-Server"
     resource_owner: "{{ ansible_user_id }}"
     aws_region: "us-west-2"
+    ec2_termination_protection: True
 
   roles:
     - { role: aws-vpc }
     - { role: ec2-instance, vars: { instance_name: "Jira Software Migration Source Instance" } }
-    - { role: ec2-instance, vars: { instance_name: "Jira ServiceDesk Migration Source Instance" } }
