@@ -1,0 +1,91 @@
+---
+
+- name: Setup VPC
+  ec2_vpc_net:
+    name: "{{ vpc_name }}-vpc"
+    cidr_block: 10.20.0.0/16
+    region: "{{ aws_region }}"
+    resource_tags:
+      Name: "{{ vpc_name }}-vpc"
+      name: "{{ vpc_name }}-vpc"
+      business_unit: "{{ business_unit }}"
+      service_name: "{{ vpc_name }}"
+      resource_owner: "{{ resource_owner }}"
+  register: vpc
+
+- name: Setup VPC Internet Gateway
+  ec2_vpc_igw:
+    vpc_id: "{{ vpc.vpc.id }}"
+    region: "{{ aws_region }}"
+    state: present
+  register: igw
+
+- name: Create subnet for resources
+  ec2_vpc_subnet:
+    vpc_id: "{{ vpc.vpc.id }}"
+    cidr: "10.20.30.0/24"
+    region: "{{ aws_region }}"
+    state: present
+    resource_tags:
+      Name: "{{ vpc_name }}-subnet"
+      name: "{{ vpc_name }}-vpc"
+      business_unit: "{{ business_unit }}"
+      service_name: "{{ vpc_name }}"
+      resource_owner: "{{ resource_owner }}"
+  register: subnet
+
+- name: Set up VPC route table
+  ec2_vpc_route_table:
+    vpc_id: "{{ vpc.vpc.id }}"
+    tags:
+      Name: "{{ vpc_name }}-vpc-routes"
+    subnets:
+      - "{{ subnet.subnet.id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ igw.gateway_id }}"
+    region: "{{ aws_region }}"
+    resource_tags:
+      Name: "{{ vpc_name }}-routes"
+      name: "{{ vpc_name }}"
+      business_unit: "{{ business_unit }}"
+      service_name: "{{ vpc_name }}"
+      resource_owner: "{{ resource_owner }}"
+  register: public_route_table
+
+
+- name: Setup security group
+  ec2_group:
+    name: "{{ vpc_name }}-sg"
+    description: "Hosting group"
+    vpc_id: "{{ vpc.vpc.id }}"
+    region: "{{ aws_region }}"
+    state: present
+    purge_rules: true
+    rules:
+      # External: Allow SSH, HTTP/HTTPS
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
+
+      # Internal-only traffic
+      - proto: icmp
+        from_port: -1
+        to_port: -1
+        cidr_ip: 10.20.0.0/16
+    purge_rules_egress: true
+    rules_egress:
+      - proto: all
+        from_port: 0
+        to_port: 65535
+        cidr_ip: 0.0.0.0/0
+  register: sg

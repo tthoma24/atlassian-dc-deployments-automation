@@ -1,0 +1,8 @@
+---
+
+ec2_ami_owner: "amazon"
+ec2_ami_description: "Amazon Linux 2 AMI 2.0.* x86_64 HVM gp2"
+ec2_type: "t3a.xlarge"
+ec2_disk_size: "512"
+ec2_keypair: "taskcat-ci-key"
+
