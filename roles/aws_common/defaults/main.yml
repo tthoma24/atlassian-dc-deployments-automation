@@ -15,3 +15,5 @@ atl_aws_log_groups:
   product: "{{ atl_aws_log_group_base }}"
   audit: "{{ atl_aws_log_group_base }}-audit"
   provisioning: "{{ atl_aws_log_group_base }}-provisioning"
+
+atl_write_tags: true
