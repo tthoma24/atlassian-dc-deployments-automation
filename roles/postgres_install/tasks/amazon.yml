@@ -1,0 +1,27 @@
+---
+
+- name: Add the official Postgres repo
+  yum_repository:
+    name: "postgres"
+    description: "Official PostgreSQL {{ postgres_version }}"
+    baseurl: "https://download.postgresql.org/pub/repos/yum/{{ postgres_version }}/redhat/rhel-7-x86_64"
+    gpgcheck: false
+    enabled: true
+
+- name: Install Postgres package
+  yum:
+    name:
+      - "postgresql{{ postgres_version_short }}"
+      - "postgresql{{ postgres_version_short }}-server"
+    update_cache: true
+
+- name: Initialise database
+  command:
+    cmd: "/usr/pgsql-{{ postgres_version }}/bin/postgresql{{ postgres_version_short }}-setup initdb"
+    creates: "/var/lib/pgsql/{{ postgres_version }}/data/"
+
+- name: Start Postgres server
+  service:
+    name: "postgresql-{{ postgres_version }}.service"
+    enabled: true
+    state: started
