@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: True
+  become: False
+
+  vars:
+    vpc_name: "DCD-Migration-Video"
+    business_unit: "Engineering-Server"
+    resource_owner: "{{ ansible_user_id }}"
+    aws_region: "us-west-2"
+    ec2_termination_protection: True
+    dns_domain: "deplops.com"
+
+  roles:
+    - role: aws-vpc
+    - role: ec2-instance
+      vars:
+        instance_name: "Jira Software Migration Source Instance"
+        instance_hostname: "jira-software-before"
+    - role: ec2-instance
+      vars:
+        instance_name: "Jira ServiceDesk Migration Source Instance"
+        instance_hostname: "jira-sd-before"
+    - role: ec2-instance
+      vars:
+        instance_name: "Confluence Migration Source Instance"
+        instance_hostname: "confluence-before"
+    - role: ec2-instance
+      vars:
+        instance_name: "Bitbucket Migration Source Instance"
+        instance_hostname: "bitbucket-before"
+    - role: ec2-instance
+      vars:
+        instance_name: "Crowd Migration Source Instance"
+        instance_hostname: "crowd-before"
