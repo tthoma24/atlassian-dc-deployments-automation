@@ -1,0 +1,3 @@
+[jira_software]
+jira-software-before.deplops.com ansible_user=ec2-user
+
