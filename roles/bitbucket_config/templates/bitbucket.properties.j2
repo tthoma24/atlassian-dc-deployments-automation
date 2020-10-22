@@ -4,6 +4,7 @@ jdbc.url={{ atl_jdbc_url }}
 jdbc.user={{ atl_jdbc_user }}
 jdbc.password={{ atl_jdbc_password }}
 
+{% if atl_enable_clustering %}
 hazelcast.network.aws=true
 hazelcast.network.aws.tag.key=Cluster
 hazelcast.network.multicast=false
@@ -12,15 +13,26 @@ hazelcast.network.aws.region={{ atl_aws_region }}
 hazelcast.network.aws.tag.value={{ atl_aws_stack_name }}
 hazelcast.group.name={{ atl_aws_stack_name }}
 hazelcast.group.password={{ atl_aws_stack_name }}
+{% endif %}
+
+{% if atl_external_elasticsearch %}
 plugin.search.elasticsearch.aws.region={{ atl_aws_region }}
 plugin.search.elasticsearch.baseurl={{ atl_elasticsearch_endpoint }}
+{% endif %}
+
 setup.displayName=Bitbucket
+{% if atl_bitbucket_baseurl is defined %}
 setup.baseUrl = {{ atl_bitbucket_baseurl }}
+{% endif %}
+{% if atl_bitbucket_license_key is defined %}
 setup.license={{ atl_bitbucket_license_key }}
+{% endif %}
+{% if atl_bitbucket_admin_password is defined %}
 setup.sysadmin.username=admin
 setup.sysadmin.password={{ atl_bitbucket_admin_password }}
-setup.sysadmin.displayName=AdminIstrator
+setup.sysadmin.displayName=Administrator
 setup.sysadmin.emailAddress=admin@yourcompany.com
+{% endif %}
 
 server.proxy-name={{ atl_proxy_name }}
 server.secure={{ atl_ssl_proxy }}
@@ -33,4 +45,3 @@ server.additional-connector.1.port=7991
 server.scheme=http
 server.proxy-port=80
 {% endif %}
-

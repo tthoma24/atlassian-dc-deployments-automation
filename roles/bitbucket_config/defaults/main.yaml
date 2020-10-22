@@ -1,0 +1,4 @@
+---
+
+atl_enable_clustering: true
+atl_external_elasticsearch: true
