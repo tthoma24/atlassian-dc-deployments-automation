@@ -12,6 +12,7 @@
     src: cluster.properties.j2
     dest: "{{ atl_product_home }}/cluster.properties"
     owner: "{{ atl_product_user }}"
+  when: atl_enable_clustering
 
 - name: Create server config
   template:

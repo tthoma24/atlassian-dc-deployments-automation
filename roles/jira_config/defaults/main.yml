@@ -1,6 +1,7 @@
 ---
 
 atl_jvm_heap: "2048m"
+atl_jvm_opts: ""
 
 atl_catalina_opts: ""
 atl_catalina_opts_extra: >-
@@ -21,6 +22,7 @@ atl_tomcat_protocol: "HTTP/1.1"
 atl_tomcat_redirectport: ""
 atl_tomcat_scheme: "http"
 atl_tomcat_secure: "false"
+atl_tomcat_enablelookups: "false"
 
 atl_db_poolminsize: '20'
 atl_db_poolmaxsize: '100'
@@ -34,3 +36,5 @@ atl_db_removeabandoned: 'true'
 atl_db_removeabandonedtimeout: '300'
 atl_db_testwhileidle: 'true'
 atl_db_testonborrow: 'false'
+
+atl_enable_clustering: true
