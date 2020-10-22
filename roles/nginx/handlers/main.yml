@@ -1,0 +1,12 @@
+---
+
+- name: Restart nginx
+  command: systemctl restart nginx.service
+  ignore_errors: true
+
+- name: Enable nginx
+  command: systemctl enable nginx.service
+  ignore_errors: true
+
+- name: Reload systemd units
+  command: systemctl daemon-reload

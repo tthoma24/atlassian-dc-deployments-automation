@@ -1,0 +1,10 @@
+---
+
+- name: Install distro-specific prerequisites
+  include_tasks: "{{ ansible_distribution|lower }}.yml"
+
+- name: Create nginx configuration
+  template:
+    src: proxy.conf.j2
+    dest: /etc/nginx/default.d/proxy.conf
+  notify: Restart nginx
