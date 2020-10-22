@@ -6,15 +6,16 @@
   become: true
 
   vars:
+    atl_proxy_name: "jira-software-before.deplops.com"
+
     atl_product_family: "jira"
     atl_product_user: "jira"
     atl_product_edition: "jira-software"
-    atl_systemd_service_name: "jira.service"
+    atl_product_version: "8.13.0"
 
     atl_db_host: "localhost"
     atl_jdbc_user: "jira"
     atl_jdbc_db_name: "jira"
-
     # Set on commandline
     # atl_jdbc_password: 
     # atl_db_root_password:
@@ -24,11 +25,12 @@
     atl_jdbc_ctype: 'C'
     atl_jdbc_template: 'template0'
 
-    atl_product_user: 'jira'
     atl_use_system_jdk: true
     atl_download_format: "tarball"
+    atl_systemd_service_name: "jira.service"
 
     atl_write_tags: false
+    atl_enable_clustering: false
 
   roles:
     - role: linux_common
@@ -37,7 +39,5 @@
     - role: database_init
     - role: product_common
     - role: product_install
-
-    # - role: restore_backups
-    # - role: jira_config
-    # - role: product_startup
+    - role: jira_config
+    - role: product_startup
