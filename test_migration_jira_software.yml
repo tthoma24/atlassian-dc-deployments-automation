@@ -1,8 +1,9 @@
 ---
 
+# This playbook is intended for provisioning migration 'before' server instances, and should not be considered best practice.
 # See migration-video-instances.yml for provisioning these instances.
 #
-# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX jira_software_server.yml
+# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX test_migration_jira_software.yml
 
 - hosts: jira_software
   become: true
@@ -19,9 +20,6 @@
     atl_db_host: "localhost"
     atl_jdbc_user: "jira"
     atl_jdbc_db_name: "jira"
-    # Set on commandline
-    # atl_jdbc_password: 
-    # atl_db_root_password:
 
     atl_jdbc_encoding: 'UNICODE'
     atl_jdbc_collation: 'C'
