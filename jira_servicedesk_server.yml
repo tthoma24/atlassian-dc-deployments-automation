@@ -2,18 +2,18 @@
 
 # See migration-video-instances.yml for provisioning these instances.
 #
-# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX jira_software_server.yml
+# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX jira_servicedesk_server.yml
 
-- hosts: jira_software
+- hosts: jira_servicedesk
   become: true
 
   vars:
-    atl_proxy_name: "jira-software-before.deplops.com"
+    atl_proxy_name: "jira-sd-before.deplops.com"
 
     atl_product_family: "jira"
     atl_product_user: "jira"
-    atl_product_edition: "jira-software"
-    atl_product_version: "8.13.0"
+    atl_product_edition: "jira-servicedesk"
+    atl_product_version: "4.13.0"
     atl_enable_clustering: false
 
     atl_db_host: "localhost"

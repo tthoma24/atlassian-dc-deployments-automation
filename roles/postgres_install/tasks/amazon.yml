@@ -18,7 +18,7 @@
 - name: Initialise database
   command:
     cmd: "/usr/pgsql-{{ postgres_version }}/bin/postgresql{{ postgres_version_short }}-setup initdb"
-    creates: "/var/lib/pgsql/{{ postgres_version }}/data/"
+    creates: "/var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf"
 
 - name: Allow local network connections with password
   postgresql_pg_hba:

@@ -1,5 +1,9 @@
 [jira_software]
 jira-software-before.deplops.com ansible_user=ec2-user
 
+[jira_servicedesk]
+jira-sd-before.deplops.com ansible_user=ec2-user
+
 [standalone_instances]
 jira-software-before.deplops.com ansible_user=ec2-user
+jira-sd-before.deplops.com ansible_user=ec2-user
