@@ -1,0 +1,50 @@
+---
+
+# This playbook is intended for provisioning migration 'before' server instances, and should not be considered best practice.
+# See migration-video-instances.yml for provisioning these instances.
+#
+# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX test_migration_confluence.yml
+
+- hosts: confluence
+  become: true
+
+  vars:
+    atl_proxy_name: "confluence-before.deplops.com"
+
+    atl_product_family: "confluence"
+    atl_product_user: "confluence"
+    atl_product_edition: "confluence"
+
+    atl_product_version: "7.4.5"
+    atl_enable_clustering: false
+
+    atl_db_host: "localhost"
+    atl_jdbc_user: "confluence"
+    atl_jdbc_db_name: "confluence"
+
+    atl_jdbc_encoding: 'UTF-8'
+    atl_jdbc_collation: 'en_US.UTF-8'
+    atl_jdbc_template: 'template0'
+
+    atl_jvm_heap: "12288m"
+    atl_use_system_jdk: true
+    atl_download_format: "tarball"
+    atl_systemd_service_name: "confluence.service"
+
+    atl_write_tags: false
+
+    atl_proxy_map:
+      "": "http://localhost:8080"
+
+
+  roles:
+    - role: linux_common
+    - role: aws_common
+    - role: postgres_install
+    - role: database_init
+    - role: product_common
+    - role: product_install
+    - role: confluence_common
+    - role: confluence_config
+    - role: product_startup
+    - role: nginx

@@ -4,6 +4,18 @@ jira-software-before.deplops.com ansible_user=ec2-user
 [jira_servicedesk]
 jira-sd-before.deplops.com ansible_user=ec2-user
 
+[confluence]
+confluence-before.deplops.com ansible_user=ec2-user
+
+[bitbucket]
+bitbucket-before.deplops.com ansible_user=ec2-user
+
+[crowd]
+crowd-before.deplops.com ansible_user=ec2-user
+
 [standalone_instances]
 jira-software-before.deplops.com ansible_user=ec2-user
 jira-sd-before.deplops.com ansible_user=ec2-user
+confluence-before.deplops.com ansible_user=ec2-user
+bitbucket-before.deplops.com ansible_user=ec2-user
+crowd-before.deplops.com ansible_user=ec2-user
