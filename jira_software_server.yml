@@ -1,8 +1,16 @@
 ---
+
+# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX jira_software_server.yml
+
 - hosts: jira_software
   become: true
 
   vars:
+    atl_product_family: "jira"
+    atl_product_user: "jira"
+    atl_product_edition: "jira-software"
+    atl_systemd_service_name: "jira.service"
+
     atl_db_host: "localhost"
     atl_jdbc_user: "jira"
     atl_jdbc_db_name: "jira"
@@ -16,9 +24,9 @@
     atl_jdbc_ctype: 'C'
     atl_jdbc_template: 'template0'
 
-
     atl_product_user: 'jira'
     atl_use_system_jdk: true
+    atl_download_format: "tarball"
 
     atl_write_tags: false
 
@@ -27,12 +35,9 @@
     - role: aws_common
     - role: postgres_install
     - role: database_init
+    - role: product_common
+    - role: product_install
 
-#    - role: product_common
-
-    # - role: product_install
-    #   tags: [skip_on_stack_update]
-    #   tags: [skip_on_stack_update]
     # - role: restore_backups
     # - role: jira_config
     # - role: product_startup

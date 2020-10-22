@@ -1,3 +1,5 @@
 [jira_software]
 jira-software-before.deplops.com ansible_user=ec2-user
 
+[standalone_instances]
+jira-software-before.deplops.com ansible_user=ec2-user
