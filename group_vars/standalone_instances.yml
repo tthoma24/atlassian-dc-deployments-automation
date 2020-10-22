@@ -22,3 +22,5 @@ atl_jdbc_template: "template1"
 
 atl_java_home: "{{ '/usr/lib/jvm/java' if atl_use_system_jdk else (atl_product_installation_current + '/jre') }}"
 atl_java_binary: "{{ atl_java_home }}/bin/java"
+
+atl_ssl_proxy: "false"

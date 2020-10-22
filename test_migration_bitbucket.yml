@@ -1,0 +1,54 @@
+---
+
+# This playbook is intended for provisioning migration 'before' server instances, and should not be considered best practice.
+# See migration-video-instances.yml for provisioning these instances.
+#
+# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX test_migration_bitbucket.yml
+
+- hosts: bitbucket
+  become: true
+
+  vars:
+    atl_proxy_name: "bitbucket-before.deplops.com"
+    atl_bitbucket_baseurl: "http://{{ atl_proxy_name }}"
+
+    atl_product_family: "stash"
+    atl_product_edition: "bitbucket"
+    atl_product_user: "bitbucket"
+
+    atl_product_version: "7.6.0"
+    atl_enable_clustering: false
+    atl_external_elasticsearch: false
+
+    atl_db_host: "localhost"
+    atl_jdbc_user: "bitbucket"
+    atl_jdbc_db_name: "bitbucket"
+
+    atl_jvm_heap: "12288m"
+    atl_use_system_jdk: true
+    atl_download_format: "tarball"
+    atl_systemd_service_name: "bitbucket.service"
+
+    atl_write_tags: false
+
+    atl_proxy_map:
+      "": "http://localhost:7990"
+
+    atl_startup_systemd_params:
+      - "UMask=0027"
+      - "LimitNOFILE=4096"
+      - "Environment=JAVA_HOME={{ atl_java_home }}"
+      - "Environment=BITBUCKET_HOME={{ atl_product_home }}"
+      - "Environment=JVM_MAXIMUM_MEMORY={{ atl_jvm_heap }}"
+      - "Environment=JVM_MINIMUM_MEMORY={{ atl_jvm_heap }}"
+
+  roles:
+    - role: linux_common
+    - role: aws_common
+    - role: postgres_install
+    - role: database_init
+    - role: product_common
+    - role: product_install
+    - role: bitbucket_config
+    - role: product_startup
+    - role: nginx
