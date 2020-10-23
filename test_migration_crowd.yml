@@ -10,6 +10,7 @@
 
   vars:
     atl_proxy_name: "crowd-before.deplops.com"
+    atl_proxy_port: "80"
 
     atl_product_user: "crowd"
     atl_product_family: "crowd"
