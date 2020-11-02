@@ -7,13 +7,14 @@ name = "pypi"
 ansible = "==2.8.5"
 boto3 = "==1.9.242"
 botocore = "==1.12.242"
+lxml = "*"
 
 [dev-packages]
-molecule = "==2.20.2"
 docker = "==4.1.0"
 six = "*"
-taskcat = "*"
 Jinja2 = "*"
+molecule = "*"
+importlib-metadata = "<2"
 
 [requires]
 python_version = "3.7"
