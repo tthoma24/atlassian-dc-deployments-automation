@@ -8,10 +8,7 @@ if [[ $ID = "amzn" ]]; then
         python3-devel \
         python3-pip \
         python2-boto3 \
-        python2-botocore \
-        python-pip 
-       
-     python -m pip install lxml
+        python2-botocore
 
 else
     # FIXME: Currently assumes Debian-based

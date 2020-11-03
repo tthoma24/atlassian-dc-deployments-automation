@@ -136,6 +136,8 @@
   register: crowd_cfg_stat_result
 
 - name: Assert JDBC password to same as atl_jdbc_password
+  pip:
+    name: lxml==4.6.1
   xml:
     path: "{{ atl_product_home_shared }}/crowd.cfg.xml"
     xpath: "/application-configuration/properties/property[@name='hibernate.connection.password']"
@@ -143,6 +145,8 @@
   when: crowd_cfg_stat_result.stat.exists
 
 - name: Assert JDBC url to same as atl_jdbc_url
+  pip:
+    name: lxml==4.6.1
   xml:
     path: "{{ atl_product_home_shared }}/crowd.cfg.xml"
     xpath: "/application-configuration/properties/property[@name='hibernate.connection.url']"
