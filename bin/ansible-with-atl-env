@@ -18,7 +18,7 @@ set +a
 
 # Use Ansible from virtualenv if provided
 pipenv run \
-    ansible-playbook -v \
+    ansible-playbook -vvv \
         $ATL_DEPLOYMENT_REPOSITORY_CUSTOM_PARAMS \
         -e "${PLAYBOOK_INVOCATION_EXTRA_PARAMS}" \
         -i $INV \
