@@ -8,8 +8,8 @@
       - awscli
       - git
       - ec2-utils
-    vars:
-      ansible_python_interpreter: auto
+  vars:
+    ansible_python_interpreter: auto
 
 - name: Install CloudWatch Agent
   yum:
