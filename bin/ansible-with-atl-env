@@ -10,9 +10,6 @@ ENV_FILE=${4:-"/etc/atl"}
 
 export PATH=/usr/local/bin:$PATH
 export PIP_DEFAULT_TIMEOUT=60
-
-VENV_PYTHON_INTERPRETER = $(pipenv --py)
-
 # Set the environment with default exports
 set -a
 source $ENV_FILE
@@ -20,7 +17,7 @@ set +a
 
 # Use Ansible from virtualenv if provided
 pipenv run \
-    ansible-playbook -e ansible_python_interpreter=$VENV_PYTHON_INTERPRETER -vvv \
+    ansible-playbook -vvv \
         $ATL_DEPLOYMENT_REPOSITORY_CUSTOM_PARAMS \
         -e "${PLAYBOOK_INVOCATION_EXTRA_PARAMS}" \
         -i $INV \
