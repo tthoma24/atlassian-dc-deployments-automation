@@ -4,7 +4,8 @@
   yum:
     name:
       - "google-noto-*"
-  ansible_python_interpreter: auto
+  vars:
+    ansible_python_interpreter: auto
 
 - name: Link the language fonts into the JDK
   # Not idiomatic, but cleaner than messing with nested lookups...

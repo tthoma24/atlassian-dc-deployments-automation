@@ -12,13 +12,15 @@
         gpgkey: https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public
         gpgcheck: yes
         state: present
-      ansible_python_interpreter: auto
+      vars:
+        ansible_python_interpreter: auto
 
     - name: Install AdoptOpenJDK
       yum:
         name: "adoptopenjdk-{{ java_major_version }}-hotspot"
         state: present
-      ansible_python_interpreter: auto
+      vars:
+        ansible_python_interpreter: auto
 
     - name: Ensure common JDK symlink exists
       alternatives:
@@ -35,4 +37,5 @@
   yum:
     name:
       - dejavu-fonts-common  # Required by the installer
-  ansible_python_interpreter: auto
+  vars:
+    ansible_python_interpreter: auto
