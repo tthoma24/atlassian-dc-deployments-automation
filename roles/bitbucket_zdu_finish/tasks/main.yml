@@ -1,0 +1,35 @@
+---
+
+- name: Assert cluster is ready to finalise upgrade
+  uri:
+    url: "{{ atl_bitbucket_baseurl }}/{{ atl_bitbucket_zdu_rest_endpoint }}/state"
+    force_basic_auth: yes
+    user: "{{ bitbucket_admin_username }}"
+    password: "{{ bitbucket_admin_password }}"
+    method: GET
+    status_code: 200
+  register: upgrade_cluster_state
+  failed_when: upgrade_cluster_state.json is not defined or upgrade_cluster_state.json.state != 'READY_TO_RUN_UPGRADE_TASKS'
+
+- name: Approve cluster upgrade
+  uri:
+    url: "{{ atl_bitbucket_baseurl }}/{{ atl_bitbucket_zdu_rest_endpoint }}/approve"
+    force_basic_auth: yes
+    user: "{{ bitbucket_admin_username }}"
+    password: "{{ bitbucket_admin_password }}"
+    method: POST
+    status_code: 200
+
+- name: Wait for cluster to finish running upgrade tasks
+  uri:
+    url: "{{ atl_bitbucket_baseurl }}/{{ atl_bitbucket_zdu_rest_endpoint }}/state"
+    force_basic_auth: yes
+    user: "{{ bitbucket_admin_username }}"
+    password: "{{ bitbucket_admin_password }}"
+    method: GET
+    status_code: 200
+  register: post_upgrade_cluster_state
+  failed_when: post_upgrade_cluster_state.json is not defined or post_upgrade_cluster_state.json.state == 'READY_TO_UPGRADE' or post_upgrade_cluster_state.json.state == 'READY_TO_RUN_UPGRADE_TASKS' or post_upgrade_cluster_state.json.state == 'MIXED'
+  until: post_upgrade_cluster_state.json is defined and post_upgrade_cluster_state.json.state == 'STABLE'
+  retries: 120
+  delay: 5

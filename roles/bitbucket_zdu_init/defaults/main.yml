@@ -1,0 +1,2 @@
+atl_bitbucket_baseurl: "{{ atl_tomcat_scheme }}://{{ atl_proxy_name }}{{ atl_tomcat_contextpath }}"
+atl_bitbucket_zdu_rest_endpoint: "rest/api/2/cluster/zdu"
