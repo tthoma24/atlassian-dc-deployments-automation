@@ -7,3 +7,4 @@
       - libxml2
       - git-{{ git_version }}
       - dejavu-sans-fonts
+  ansible_python_interpreter: auto

@@ -25,11 +25,13 @@
       package:
         state: present
         name: tar
+      ansible_python_interpreter: auto
 
     - name: "{{ test_pre_step_prefix }} Install useradd and groupadd binaries"
       package:
         state: present
         name: shadow-utils
+      ansible_python_interpreter: auto
 
     - name: "{{ test_pre_step_prefix }} Create application group"
       group:

@@ -8,10 +8,12 @@
     description: Atlassian Slingshot
     baseurl: "{{ atl_slingshot_yum_repo_url }}"
     gpgcheck: no
+  ansible_python_interpreter: auto
 
 - name: Install atlassian-slingshot
   yum:
     name: atlassian-slingshot
+  ansible_python_interpreter: auto
 
 - name: Enable Postgresql from 'extras'
   command: amazon-linux-extras install -y "postgresql{{ atl_amazon_extras_postgresql_version }}"

@@ -4,3 +4,4 @@
   yum:
     name:
       - nfs-utils
+  ansible_python_interpreter: auto

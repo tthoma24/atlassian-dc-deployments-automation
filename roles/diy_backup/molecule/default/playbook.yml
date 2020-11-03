@@ -27,6 +27,7 @@
     - name: Install git
       package:
         name: git
+      ansible_python_interpreter: auto
 
   roles:
     - role: diy_backup

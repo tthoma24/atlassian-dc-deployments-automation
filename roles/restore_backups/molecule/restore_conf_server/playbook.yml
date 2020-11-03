@@ -28,6 +28,7 @@
         name:
           - tar
           - shadow-utils
+      ansible_python_interpreter: auto
 
     - name: "{{ test_pre_step_prefix }} Create application group"
       group:

@@ -8,6 +8,7 @@
       - awscli
       - git
       - ec2-utils
+  ansible_python_interpreter: auto
 
 - name: Install CloudWatch Agent
   yum:
@@ -16,3 +17,4 @@
   when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch
   notify:
     - Enable CloudWatch Agent
+  ansible_python_interpreter: auto
