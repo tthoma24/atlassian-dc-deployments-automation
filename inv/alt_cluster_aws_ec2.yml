@@ -11,6 +11,6 @@
 plugin: aws_ec2
 
 filters:
-  tag:aws:autoscaling:groupName: test-nghazali-quickstart-bitbucket-3
+  tag:aws:autoscaling:groupName: test-nghazali-quickstart-bitbucket-6
 regions:
   - ap-southeast-2
