@@ -1,0 +1,35 @@
+---
+
+# This is simple proof-of-concept for a playbook that uses our roles in a generalised manner.
+#
+# ansible-playbook -v -i inv/standalone_instances -e atl_db_root_password=XXX -e atl_jdbc_password=XXX standalone_jira_software_dc_node.yml
+
+- hosts: jira_software_node
+  become: true
+
+  vars:
+    atl_proxy_name: "jira.internal.my-company.com"
+
+    atl_product_family: "jira"
+    atl_product_user: "jira"
+    atl_product_edition: "jira-software"
+
+    atl_product_version: "8.13.0"
+    atl_enable_clustering: true
+
+    atl_db_host: "jiradb.internal.my-company.com"
+    atl_jdbc_user: "jira"
+    atl_jdbc_db_name: "jira"
+
+    atl_jvm_heap: "12288m"
+    atl_use_system_jdk: true
+    atl_download_format: "tarball"
+    atl_systemd_service_name: "jira.service"
+
+  roles:
+    - role: linux_common
+    - role: database_init
+    - role: product_common
+    - role: product_install
+    - role: jira_config
+    - role: product_startup
