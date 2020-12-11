@@ -2,3 +2,8 @@
 
 - name: Perform distro-specific tasks
   include_tasks: "{{ ansible_distribution|lower }}.yml"
+
+- name: Verification of branch
+  debug:
+    msg:
+      - ">>>> THIS PLAYBOOK HAS BEEN RUN FROM [feature/azure_deployments]"
